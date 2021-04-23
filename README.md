@@ -20,9 +20,19 @@ Optional features:
 
 ## Setup development environment
 
-1. Setup virtualenv
+1. Download, install and setup [Git LFS](https://git-lfs.github.com/)
+
+2. Setup virtualenv
 ```
 ./scripts/setup/dev.sh
 source venv/bin/activate
 ```
-2. Download, install and setup [Git LFS](https://git-lfs.github.com/)
+
+3. install package
+```
+pip install -e .
+```
+Now you can run app with
+```
+dl_markup
+```
