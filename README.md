@@ -17,3 +17,22 @@ Optional features:
 1. "Eraser" instrument.
 2. "Undo" button.
 3. Multi-class labelling.
+
+## Setup development environment
+
+1. Download, install and setup [Git LFS](https://git-lfs.github.com/)
+
+2. Setup virtualenv
+```
+./scripts/setup/dev.sh
+source venv/bin/activate
+```
+
+3. install package
+```
+pip install -e .
+```
+Now you can run app with
+```
+dl_markup
+```
