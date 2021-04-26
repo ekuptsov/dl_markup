@@ -1,4 +1,4 @@
-from PyQt5 import QtGui, QtCore, QtWidgets, QtOpenGL
+from PyQt5 import QtGui, QtCore, QtWidgets
 
 from .undo_redo import UndoRedo
 from .scene import Scene, CylinderItem
@@ -26,7 +26,3 @@ def main():
 
     view.show()
     app.exec_()
-
-
-if __name__ == '__main__':
-    main()

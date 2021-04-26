@@ -51,7 +51,7 @@ class UndoRedo:
         for _ in range(levels):
             if not self.__redo_commands:
                 break
-            command = self.__undo_commands.pop()
+            command = self.__redo_commands.pop()
             command.execute()
             self.__undo_commands.append(command)
 

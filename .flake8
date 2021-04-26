@@ -1,3 +1,4 @@
 [flake8]
 max-line-length = 119
 exclude = .git,venv
+per-file-ignores = tests/test_undo_redo.py:F401,F811
