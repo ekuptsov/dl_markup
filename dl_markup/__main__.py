@@ -1,4 +1,4 @@
-from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5 import QtGui, QtCore, QtWidgets, QtOpenGL
 
 from .undo_redo import UndoRedo
 from .scene import Scene, CylinderItem
@@ -7,7 +7,7 @@ from .scene import Scene, CylinderItem
 def main():
     app = QtWidgets.QApplication([])
 
-    scene = Scene()
+    scene = Scene(0, 0, 512, 512)
     scene.img = QtGui.QPixmap('resources/Lenna.png')
     undo_redo = UndoRedo(scene)
 
@@ -21,8 +21,8 @@ def main():
 
     undo_redo.insert_in_undo_redo_add(cylinder)
 
-    view = QtWidgets.QLabel()
-    view.setPixmap(scene.display)
+    view = QtWidgets.QGraphicsView(scene)
+    view.show()
 
     view.show()
     app.exec_()
