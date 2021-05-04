@@ -19,6 +19,14 @@ class View(QtWidgets.QMainWindow):
         self._centralWidget.setLayout(self.generalLayout)
         self.generalLayout.addWidget(self.fileList)
         self.generalLayout.addWidget(QtWidgets.QGraphicsView(scene))
+        self._createToolbar()
+
+    def _createToolbar(self):
+        tools = QtWidgets.QToolBar()
+        self.addToolBar(tools)
+        tools.addAction('Select input directory', print)
+        tools.addAction('Select output directory', print)
+        tools.addAction('Save', print)
 
 
 def main():
