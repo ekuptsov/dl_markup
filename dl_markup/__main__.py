@@ -4,6 +4,23 @@ from .undo_redo import UndoRedo
 from .scene import Scene, CylinderItem
 
 
+class View(QtWidgets.QMainWindow):
+    """
+    Application view
+    """
+    def __init__(self, scene):
+        super().__init__()
+        self.scene = scene
+        self.fileList = QtWidgets.QListView()
+        self.setWindowTitle("DL Markup")
+        self.generalLayout = QtWidgets.QHBoxLayout()
+        self._centralWidget = QtWidgets.QWidget(self)
+        self.setCentralWidget(self._centralWidget)
+        self._centralWidget.setLayout(self.generalLayout)
+        self.generalLayout.addWidget(self.fileList)
+        self.generalLayout.addWidget(QtWidgets.QGraphicsView(scene))
+
+
 def main():
     app = QtWidgets.QApplication([])
 
@@ -21,8 +38,9 @@ def main():
 
     undo_redo.insert_in_undo_redo_add(cylinder)
 
-    view = QtWidgets.QGraphicsView(scene)
+    view = View(scene)
     view.show()
 
-    view.show()
+
+
     app.exec_()
