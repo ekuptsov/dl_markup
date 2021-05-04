@@ -23,6 +23,12 @@ class View(QtWidgets.QMainWindow):
     def _createToolbar(self):
         tools = QtWidgets.QToolBar()
         self.addToolBar(tools)
-        tools.addAction('Select input directory', print)
-        tools.addAction('Select output directory', print)
+        tools.addAction('Select input directory', self._selectInputDirectory)
+        tools.addAction('Select output directory', self._selectOutputDirectory)
         tools.addAction('Save', print)
+
+    def _selectInputDirectory(self):
+        self.inputDirectory = QtWidgets.QFileDialog.getExistingDirectory()
+
+    def _selectOutputDirectory(self):
+        self.inputDirectory = QtWidgets.QFileDialog.getExistingDirectory()
