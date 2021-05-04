@@ -10,14 +10,21 @@ class View(QtWidgets.QMainWindow):
         self.scene = scene
         self.fileList = QtWidgets.QListView()
         self.setWindowTitle("DL Markup")
-        self.inputDirectory = '.'
-        self.outputDirectory = '.'
-        layout = QtWidgets.QHBoxLayout()
+        self.inputDirectory = QtWidgets.QLabel('.')
+        self.outputDirectory = QtWidgets.QLabel('.')
+
+        mainLayout = QtWidgets.QVBoxLayout()
         centralWidget = QtWidgets.QWidget(self)
         self.setCentralWidget(centralWidget)
-        centralWidget.setLayout(layout)
+        centralWidget.setLayout(mainLayout)
+        mainLayout.addWidget(self.inputDirectory)
+        mainLayout.addWidget(self.outputDirectory)
+
+        layout = QtWidgets.QHBoxLayout()
+        mainLayout.addLayout(layout)
         layout.addWidget(self.fileList)
         layout.addWidget(QtWidgets.QGraphicsView(scene))
+
         self._createToolbar()
 
     def _createToolbar(self):
@@ -28,7 +35,7 @@ class View(QtWidgets.QMainWindow):
         tools.addAction('Save', print)
 
     def _selectInputDirectory(self):
-        self.inputDirectory = QtWidgets.QFileDialog.getExistingDirectory()
+        self.inputDirectory.setText(QtWidgets.QFileDialog.getExistingDirectory())
 
     def _selectOutputDirectory(self):
-        self.inputDirectory = QtWidgets.QFileDialog.getExistingDirectory()
+        self.outputDirectory.setText(QtWidgets.QFileDialog.getExistingDirectory())
