@@ -10,12 +10,14 @@ class View(QtWidgets.QMainWindow):
         self.scene = scene
         self.fileList = QtWidgets.QListView()
         self.setWindowTitle("DL Markup")
-        self.generalLayout = QtWidgets.QHBoxLayout()
-        self._centralWidget = QtWidgets.QWidget(self)
-        self.setCentralWidget(self._centralWidget)
-        self._centralWidget.setLayout(self.generalLayout)
-        self.generalLayout.addWidget(self.fileList)
-        self.generalLayout.addWidget(QtWidgets.QGraphicsView(scene))
+        self.inputDirectory = '.'
+        self.outputDirectory = '.'
+        layout = QtWidgets.QHBoxLayout()
+        centralWidget = QtWidgets.QWidget(self)
+        self.setCentralWidget(centralWidget)
+        centralWidget.setLayout(layout)
+        layout.addWidget(self.fileList)
+        layout.addWidget(QtWidgets.QGraphicsView(scene))
         self._createToolbar()
 
     def _createToolbar(self):
