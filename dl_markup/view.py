@@ -40,10 +40,17 @@ class View(QMainWindow):
         self.addToolBar(tools)
         tools.addAction('Select input directory', self._selectInputDirectory)
         tools.addAction('Select output directory', self._selectOutputDirectory)
-        tools.addAction('Save', print)
+        tools.addAction('Open', self._open)
+        tools.addAction('Save', self._save)
 
     def _selectInputDirectory(self):
         self.inputDirectory.setText(QFileDialog.getExistingDirectory())
 
     def _selectOutputDirectory(self):
         self.outputDirectory.setText(QFileDialog.getExistingDirectory())
+
+    def _open(self):
+        pass
+
+    def _save(self):
+        pass
