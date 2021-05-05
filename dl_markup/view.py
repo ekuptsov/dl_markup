@@ -36,13 +36,14 @@ class View(QMainWindow):
 
         layout.addWidget(canvas)
 
-        self._createToolbar(model)
+        self._createToolbar(model, canvas)
 
-    def _createToolbar(self, model: Model):
+    def _createToolbar(self, model: Model, canvas: Canvas):
         tools = QToolBar()
         self.addToolBar(tools)
         tools.addAction('Select input directory', model.selectInputDirectory)
         tools.addAction('Select output directory', model.selectOutputDirectory)
-        openHandler = partial(model.open, self.fileList.selectedIndexes)
-        tools.addAction('Open', openHandler)
+        tools.addAction('Open', partial(model.open, self.fileList.selectedIndexes))
         tools.addAction('Save', model.save)
+        tools.addAction('Undo', partial(canvas.undo_redo.undo, levels=1))
+        tools.addAction('Redo', partial(canvas.undo_redo.redo, levels=1))
