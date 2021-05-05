@@ -3,6 +3,7 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 from .undo_redo import UndoRedo
 from .scene import Scene, CylinderItem
 from .view import View
+from .model import Model
 
 
 def main():
@@ -22,7 +23,8 @@ def main():
 
     undo_redo.insert_in_undo_redo_add(cylinder)
 
-    view = View(scene)
+    model = Model(scene)
+    view = View(model)
     view.show()
 
     app.exec_()
