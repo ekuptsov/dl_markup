@@ -141,3 +141,10 @@ cython_debug/
 
 # Vscode local settings
 .vscode/
+
+# Directories for manual testing
+input
+output
+
+# Mac metadata
+.DS_Store
