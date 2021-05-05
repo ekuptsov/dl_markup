@@ -2,6 +2,7 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 
 from .undo_redo import UndoRedo
 from .scene import Scene, CylinderItem
+from .view import View
 
 
 def main():
@@ -21,8 +22,7 @@ def main():
 
     undo_redo.insert_in_undo_redo_add(cylinder)
 
-    view = QtWidgets.QGraphicsView(scene)
+    view = View(scene)
     view.show()
 
-    view.show()
     app.exec_()
