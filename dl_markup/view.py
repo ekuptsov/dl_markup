@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QToolBar
 from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtCore import QCoreApplication
 
 from functools import partial
 from .model import Model
@@ -40,10 +41,10 @@ class View(QMainWindow):
     def _createToolbar(self, model: Model, canvas: Canvas):
         tools = QToolBar()
         self.addToolBar(tools)
-        tools.addAction('Select input directory', model.selectInputDirectory)
-        tools.addAction('Select output directory', model.selectOutputDirectory)
-        tools.addAction('Open', partial(model.open, self.fileList.selectedIndexes))
-        tools.addAction('Save', model.save)
-        tools.addAction('Undo', partial(canvas.undo_redo.undo, levels=1))
-        tools.addAction('Redo', partial(canvas.undo_redo.redo, levels=1))
-        tools.addAction('Clear', canvas.clear)
+        tools.addAction(QCoreApplication.translate('View', 'Select input directory'), model.selectInputDirectory)
+        tools.addAction(QCoreApplication.translate('View', 'Select output directory'), model.selectOutputDirectory)
+        tools.addAction(QCoreApplication.translate('View', 'Open'), partial(model.open, self.fileList.selectedIndexes))
+        tools.addAction(QCoreApplication.translate('View', 'Save'), model.save)
+        tools.addAction(QCoreApplication.translate('View', 'Undo'), partial(canvas.undo_redo.undo, levels=1))
+        tools.addAction(QCoreApplication.translate('View', 'Redo'), partial(canvas.undo_redo.redo, levels=1))
+        tools.addAction(QCoreApplication.translate('View', 'Clear'), canvas.clear)
