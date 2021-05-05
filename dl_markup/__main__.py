@@ -1,6 +1,5 @@
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QTranslator
-from PyQt5.QtCore import QLocale
 import locale
 
 from .undo_redo import UndoRedo
@@ -13,11 +12,9 @@ from .canvas import Canvas
 def main():
     app = QtWidgets.QApplication([])
 
-    locale_str = locale.getlocale(locale.LC_ALL)[0]
-    print(locale_str)
-    qlocale = QLocale(locale_str)
+    locale_str = locale.getlocale(locale.LC_MESSAGES)[0]
     translator = QTranslator()
-    translator.load(qlocale, "dl_markup")
+    translator.load(f"dl_markup.{locale_str}")
     if not app.installTranslator(translator):
         print("Can not install translation")
 

@@ -148,3 +148,6 @@ output
 
 # Mac metadata
 .DS_Store
+
+# Localization files
+*.qm
