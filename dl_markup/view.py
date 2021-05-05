@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QGraphicsView
 from PyQt5.QtWidgets import QToolBar
 from PyQt5.QtWidgets import QMainWindow
 
+from functools import partial
 from .model import Model
 
 
@@ -41,5 +42,6 @@ class View(QMainWindow):
         self.addToolBar(tools)
         tools.addAction('Select input directory', model.selectInputDirectory)
         tools.addAction('Select output directory', model.selectOutputDirectory)
-        tools.addAction('Open', model.open)
+        openHandler = partial(model.open, self.fileList.selectedIndexes)
+        tools.addAction('Open', openHandler)
         tools.addAction('Save', model.save)

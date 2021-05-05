@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QFileDialog
+from PyQt5 import QtGui
 import os
 
 from .list_model import ListModel
@@ -19,11 +20,18 @@ class Model:
     def selectOutputDirectory(self):
         self.outputDirectory.setText(QFileDialog.getExistingDirectory())
 
-    def open(self):
-        pass
+    def open(self, get_indexes):
+        indexes = get_indexes()
+        if indexes:
+            index = indexes[0].row()
+            img_path = os.path.join(
+                self.inputDirectory.text(),
+                self.listModel.items[index]
+            )
+            self.scene.img = QtGui.QPixmap(img_path)
 
     def save(self):
-        pass
+        print("Save called")
 
     def _updateFileList(self):
         files = os.listdir(self.inputDirectory.text())
