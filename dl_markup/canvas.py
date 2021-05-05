@@ -6,6 +6,7 @@ from .undo_redo import UndoRedo
 
 
 class Canvas(QtWidgets.QGraphicsView):
+
     def __init__(self, scene: Scene, undo_redo: UndoRedo):
         super().__init__(scene)
         self.scene = scene

@@ -1,4 +1,4 @@
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtWidgets
 
 from .undo_redo import UndoRedo
 from .scene import Scene
@@ -10,7 +10,6 @@ from .canvas import Canvas
 def main():
     app = QtWidgets.QApplication([])
     scene = Scene(0, 0, 512, 512)
-    scene.img = QtGui.QPixmap('resources/Lenna.png')
     undo_redo = UndoRedo(scene)
     canvas = Canvas(scene, undo_redo)
     model = Model(canvas)

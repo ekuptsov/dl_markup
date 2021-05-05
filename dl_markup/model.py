@@ -6,6 +6,7 @@ from .list_model import ListModel
 
 
 class Model:
+
     def __init__(self, canvas):
         self.canvas = canvas
         self.inputDirectory = QLabel('.')

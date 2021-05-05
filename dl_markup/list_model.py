@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 
 
 class ListModel(QtCore.QAbstractListModel):
+
     def __init__(self, *args, items=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.items = items or []
