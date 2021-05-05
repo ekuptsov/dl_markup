@@ -1,4 +1,5 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5.QtCore import Qt
 from .cylinder_item import CylinderItem
 
 
@@ -32,3 +33,12 @@ class Canvas(QtWidgets.QGraphicsView):
     def mouseReleaseEvent(self, e):
         self.last_x = None
         self.last_y = None
+
+    def keyPressEvent(self, e):
+        if e.key() == Qt.Key_Plus or e.key() == Qt.Key_Equal:
+            self.brush_size = self.brush_size + 1
+        elif e.key() == Qt.Key_Minus:
+            self.brush_size = max(1, self.brush_size - 1)
+        else:
+            return
+        print("New brush size:", self.brush_size)
