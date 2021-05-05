@@ -15,10 +15,10 @@ class Canvas(QtWidgets.QGraphicsView):
         self.last_x, self.last_y = None, None
 
     def mouseMoveEvent(self, e):
-        if self.last_x is None: # First event.
+        if self.last_x is None:  # First event.
             self.last_x = e.x()
             self.last_y = e.y()
-            return # Ignore the first time.
+            return  # Ignore the first time.
 
         cylinder = CylinderItem(
             QtCore.QPointF(self.last_x, self.last_y),
@@ -28,7 +28,7 @@ class Canvas(QtWidgets.QGraphicsView):
             brush=QtGui.QBrush(self.color)
         )
         self.undo_redo.insert_in_undo_redo_add(cylinder)
-        
+
         # Update the origin for next time.
         self.last_x = e.x()
         self.last_y = e.y()

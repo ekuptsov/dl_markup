@@ -1,4 +1,4 @@
-from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5 import QtGui, QtWidgets
 
 
 class Scene(QtWidgets.QGraphicsScene):
@@ -22,8 +22,10 @@ class Scene(QtWidgets.QGraphicsScene):
     def clear(self):
         super().clear()
         if self.__img_item is not None:
-            try: self.addItem(self.__img_item)
-            except RuntimeError as e: print(e)
+            try:
+                self.addItem(self.__img_item)
+            except RuntimeError as e:
+                print(e)
 
     @property
     def img(self) -> QtGui.QPixmap:
@@ -32,8 +34,10 @@ class Scene(QtWidgets.QGraphicsScene):
     @img.setter
     def img(self, val: QtGui.QPixmap):
         if self.__img_item is not None:
-            try: self.removeItem(self.__img_item)
-            except RuntimeError as e: print(e)
+            try:
+                self.removeItem(self.__img_item)
+            except RuntimeError as e:
+                print(e)
         img = self.__set_alpha(val, 0.8)
         self.__img_item = QtWidgets.QGraphicsPixmapItem(img)
         self.__img_item.setZValue(1.0)

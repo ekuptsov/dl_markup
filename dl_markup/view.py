@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import QListView
 from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtWidgets import QGraphicsView
 from PyQt5.QtWidgets import QToolBar
 from PyQt5.QtWidgets import QMainWindow
 

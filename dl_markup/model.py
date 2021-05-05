@@ -1,6 +1,5 @@
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QFileDialog
-from PyQt5 import QtGui
 import os
 
 from .list_model import ListModel
