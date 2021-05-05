@@ -8,13 +8,14 @@ from PyQt5.QtWidgets import QMainWindow
 
 from functools import partial
 from .model import Model
+from .canvas import Canvas
 
 
 class View(QMainWindow):
     """
     Application view
     """
-    def __init__(self, model):
+    def __init__(self, model: Model, canvas: Canvas):
         super().__init__()
         self.setWindowTitle("DL Markup")
 
@@ -33,11 +34,11 @@ class View(QMainWindow):
         self.fileList.setModel(model.listModel)
         layout.addWidget(self.fileList)
 
-        layout.addWidget(QGraphicsView(model.scene))
+        layout.addWidget(canvas)
 
         self._createToolbar(model)
 
-    def _createToolbar(self, model):
+    def _createToolbar(self, model: Model):
         tools = QToolBar()
         self.addToolBar(tools)
         tools.addAction('Select input directory', model.selectInputDirectory)

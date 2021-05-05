@@ -5,6 +5,7 @@ from .scene import Scene
 from .cylinder_item import CylinderItem
 from .view import View
 from .model import Model
+from .canvas import Canvas
 
 
 def main():
@@ -21,11 +22,11 @@ def main():
         pen=QtGui.QPen(QtGui.QColor(0, 255, 0)),
         brush=QtGui.QBrush(QtGui.QColor(0, 255, 0))
     )
-
     undo_redo.insert_in_undo_redo_add(cylinder)
 
+    canvas = Canvas(scene, undo_redo)
     model = Model(scene)
-    view = View(model)
+    view = View(model, canvas)
     view.show()
 
     app.exec_()
