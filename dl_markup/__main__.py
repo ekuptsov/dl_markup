@@ -1,7 +1,8 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 from .undo_redo import UndoRedo
-from .scene import Scene, CylinderItem
+from .scene import Scene
+from .cylinder_item import CylinderItem
 from .view import View
 from .model import Model
 
