@@ -7,8 +7,8 @@ from .list_model import ListModel
 
 
 class Model:
-    def __init__(self, scene):
-        self.scene = scene
+    def __init__(self, canvas):
+        self.canvas = canvas
         self.inputDirectory = QLabel('.')
         self.outputDirectory = QLabel('.')
         self.listModel = ListModel()
@@ -28,7 +28,7 @@ class Model:
                 self.inputDirectory.text(),
                 self.listModel.items[index]
             )
-            self.scene.img = QtGui.QPixmap(img_path)
+            self.canvas.updateBackgroundImage(img_path)
 
     def save(self):
         print("Save called")

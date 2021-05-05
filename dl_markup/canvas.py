@@ -1,11 +1,14 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtCore import Qt
 from .cylinder_item import CylinderItem
+from .scene import Scene
+from .undo_redo import UndoRedo
 
 
 class Canvas(QtWidgets.QGraphicsView):
-    def __init__(self, scene, undo_redo):
+    def __init__(self, scene: Scene, undo_redo: UndoRedo):
         super().__init__(scene)
+        self.scene = scene
         self.undo_redo = undo_redo
         self.color = QtGui.QColor(0, 255, 0)
         self.brush_size = 20
@@ -42,3 +45,11 @@ class Canvas(QtWidgets.QGraphicsView):
         else:
             return
         print("New brush size:", self.brush_size)
+
+    def clear(self):
+        self.scene.clear()
+        self.undo_redo.clear()
+
+    def updateBackgroundImage(self, img_path: str):
+        self.clear()
+        self.scene.img = QtGui.QPixmap(img_path)

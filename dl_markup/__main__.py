@@ -14,7 +14,7 @@ def main():
     scene.img = QtGui.QPixmap('resources/Lenna.png')
     undo_redo = UndoRedo(scene)
     canvas = Canvas(scene, undo_redo)
-    model = Model(scene)
+    model = Model(canvas)
     view = View(model, canvas)
     view.show()
     app.exec_()

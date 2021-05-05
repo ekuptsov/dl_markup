@@ -47,3 +47,4 @@ class View(QMainWindow):
         tools.addAction('Save', model.save)
         tools.addAction('Undo', partial(canvas.undo_redo.undo, levels=1))
         tools.addAction('Redo', partial(canvas.undo_redo.redo, levels=1))
+        tools.addAction('Clear', canvas.clear)

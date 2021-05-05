@@ -65,3 +65,7 @@ class UndoRedo:
         command = AddCommand(item, self.__container)
         command.execute()
         self.insert_in_undo_redo(command)
+
+    def clear(self):
+        self.__undo_commands.clear()
+        self.__redo_commands.clear()
