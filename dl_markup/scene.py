@@ -2,8 +2,10 @@ from PyQt5 import QtGui, QtWidgets
 
 
 class Scene(QtWidgets.QGraphicsScene):
+    """Class that stores drawn primitives."""
 
     def __init__(self, *argc, **kwargs):
+        """Initialize scene."""
         super().__init__(*argc, **kwargs)
         self.__img_item = None
         self.setBackgroundBrush(QtGui.QBrush(
@@ -11,6 +13,11 @@ class Scene(QtWidgets.QGraphicsScene):
         ))
 
     def __set_alpha(self, img: QtGui.QPixmap, alpha: float) -> QtGui.QPixmap:
+        """Create new image with another opacity.
+        
+        :param img: original image
+        :param alpha: opacity value from interval [0, 1]
+        """
         output = QtGui.QPixmap(img.size())
         output.fill(QtGui.QColor.fromRgb(0, 0, 0, 0))
         painter = QtGui.QPainter(output)
@@ -20,6 +27,7 @@ class Scene(QtWidgets.QGraphicsScene):
         return output
 
     def clear(self):
+        """Remove all primitives from scene, leaving background image."""
         if self.__img_item is not None:
             self.removeItem(self.__img_item)
         super().clear()
@@ -28,6 +36,7 @@ class Scene(QtWidgets.QGraphicsScene):
 
     @property
     def img(self) -> QtGui.QPixmap:
+        """Background image."""
         return self.__img_item.pixmap()
 
     @img.setter
@@ -41,6 +50,7 @@ class Scene(QtWidgets.QGraphicsScene):
 
     @property
     def segm(self) -> QtGui.QPixmap:
+        """Return current segmentation mask."""
         self.removeItem(self.__img_item)
 
         segm = QtGui.QPixmap(self.width(), self.height())

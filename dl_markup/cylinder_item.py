@@ -2,6 +2,10 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 
 
 class CylinderItem(QtWidgets.QGraphicsItem):
+    """Drawing item that represents basic brush movement.
+
+    Contains two circles and rectangle between them.
+    """
 
     def __init__(
             self,
@@ -10,6 +14,14 @@ class CylinderItem(QtWidgets.QGraphicsItem):
             radius: float,
             pen: QtGui.QPen = None,
             brush: QtGui.QBrush = None):
+        """Initialize CylinderItem.
+        
+        :param begin: first point
+        :param end: second point
+        :param raduis: size of circles
+        :param pen: QPen object with color information
+        :param brush: QBrush object with color information
+        """
         super().__init__()
         self.__begin = begin
         self.__end = end
@@ -19,6 +31,7 @@ class CylinderItem(QtWidgets.QGraphicsItem):
         self.__create_parts()
 
     def __create_parts(self):
+        """Create circles and rectangle."""
         dir_vec = QtGui.QVector2D(
             self.__end.x() - self.__begin.x(),
             self.__end.y() - self.__begin.y()
@@ -57,6 +70,7 @@ class CylinderItem(QtWidgets.QGraphicsItem):
         self.__polygon.setBrush(self.__brush)
 
     def boundingRect(self) -> QtCore.QRectF:
+        """Create bounding box for current item."""
         x = [
             self.__begin.x() - self.__radius,
             self.__begin.x() + self.__radius,
@@ -76,6 +90,7 @@ class CylinderItem(QtWidgets.QGraphicsItem):
             painter: QtGui.QPainter,
             option: QtWidgets.QStyleOptionGraphicsItem,
             widget: QtWidgets.QWidget):
+        """Paint item."""
         self.__ellipse_1.paint(painter, option, widget)
         self.__ellipse_2.paint(painter, option, widget)
         self.__polygon.paint(painter, option, widget)
