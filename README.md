@@ -36,3 +36,15 @@ Now you can run app with
 ```
 dl_markup
 ```
+
+## Update localization
+
+1. Go to the root
+
+2. `pylupdate5 dl_markup/*.py -ts dl_markup.ru.ts`
+
+3. `lrelease dl_markup.ru.ts`
+
+## Run tests
+
+`pytest .`
