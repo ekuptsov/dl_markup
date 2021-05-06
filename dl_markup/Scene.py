@@ -45,17 +45,21 @@ class Scene(QtWidgets.QGraphicsScene):
 
     @img.setter
     def img(self, val: QtGui.QPixmap):
+        # remove current image item (but save its childrens)
         child_items = []
         if self.__img_item is not None:
             child_items = self.__img_item.childItems()
             for item in child_items:
                 item.setParentItem(None)
             self.removeItem(self.__img_item)
+        # create new image item and set its childrens
         val = self.__set_alpha(val, 0.8)
         self.__img_item = self.__get_img_item(val)
         for item in child_items:
             item.setParentItem(self.__img_item)
         self.addItem(self.__img_item)
+        # chage bounding rectangle accoring to new image size
+        self.setSceneRect(0, 0, val.width(), val.height())
 
     def __get_img_item(self, img: QtGui.QPixmap) -> QtWidgets.QGraphicsPixmapItem:
         img_item = QtWidgets.QGraphicsPixmapItem(img)
