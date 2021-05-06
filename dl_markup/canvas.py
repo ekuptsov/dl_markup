@@ -8,11 +8,12 @@ from .UndoRedo import UndoRedo
 
 class Canvas(QtWidgets.QGraphicsView):
     """A class capable of user interaction with scene.
+
     Inherits QtWidgets.QGraphicsView, so it can be placed in layout.
     """
 
     def __init__(self, scene: Scene, undo_redo: UndoRedo):
-        """Creates a new canvas.
+        """Create a new canvas.
 
         :param scene: scene object for drawing
         :param undo_redo: an object for storing history
@@ -56,7 +57,7 @@ class Canvas(QtWidgets.QGraphicsView):
         self.last_y = None
 
     def keyPressEvent(self, e):
-        """Change brush size by pressing '+' and '-' buttons
+        """Change brush size by pressing '+' and '-' buttons.
 
         :param e: event object
         """

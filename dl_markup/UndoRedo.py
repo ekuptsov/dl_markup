@@ -6,7 +6,7 @@ from .Scene import Scene
 
 
 class ICommand(ABC):
-    """Abstract command"""
+    """Abstract command."""
 
     @abstractmethod
     def execute(self):
@@ -15,12 +15,12 @@ class ICommand(ABC):
 
     @abstractmethod
     def un_execute(self):
-        """Undo command execution"""
+        """Undo command execution."""
         pass
 
 
 class AddCommand(ICommand):
-    """Command adding new item to scene"""
+    """Command adding new item to scene."""
 
     def __init__(
             self,
@@ -47,7 +47,7 @@ class UndoRedo:
     """Class for saving drawing history and performing undo/redo functionality."""
 
     def __init__(self, scene: Scene):
-        """Initialize UndoRedo object
+        """Initialize UndoRedo object.
 
         :param scene: scene for drawing
         """
