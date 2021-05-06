@@ -30,6 +30,7 @@ class DlMarkupApplication:
         """Retranslate UI to locale language."""
         locale_str = locale.getlocale(locale.LC_MESSAGES)[0]
         translator = QTranslator()
+        print("Locale:", locale_str)
         translator.load(f"dl_markup.{locale_str}")
         if not self.app.installTranslator(translator):
             print("Can not install translation")
