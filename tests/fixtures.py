@@ -1,8 +1,8 @@
 from PyQt5 import QtWidgets
 import pytest
 
-from dl_markup.undo_redo import UndoRedo
-from dl_markup.scene import Scene
+from dl_markup.UndoRedo import UndoRedo
+from dl_markup.Scene import Scene
 
 
 @pytest.fixture

@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QFileDialog
 
-from dl_markup.model import Model
-from dl_markup.canvas import Canvas
+from dl_markup.Model import Model
+from dl_markup.Canvas import Canvas
 
 from fixtures import scene_with_undo_redo
 
