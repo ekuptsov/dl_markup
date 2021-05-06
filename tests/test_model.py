@@ -1,0 +1,65 @@
+from PyQt5.QtWidgets import QFileDialog
+
+from dl_markup.model import Model
+from dl_markup.canvas import Canvas
+
+from fixtures import scene_with_undo_redo
+
+
+def test_select_input_directory_1(
+        qapp,
+        scene_with_undo_redo,
+        monkeypatch):
+    _, scene, undo_redo = scene_with_undo_redo
+
+    canvas = Canvas(scene, undo_redo)
+    model = Model(canvas)
+
+    monkeypatch.setattr(
+        QFileDialog,
+        'getExistingDirectory',
+        lambda *args: './resources'
+    )
+    model.selectInputDirectory()
+
+    assert 'Lenna.png' in model.listModel.items
+    assert model.inputDirectory.text() == './resources'
+
+
+def test_select_input_directory_2(
+        qapp,
+        scene_with_undo_redo,
+        monkeypatch):
+    _, scene, undo_redo = scene_with_undo_redo
+
+    canvas = Canvas(scene, undo_redo)
+    model = Model(canvas)
+
+    monkeypatch.setattr(
+        QFileDialog,
+        'getExistingDirectory',
+        lambda *args: ''
+    )
+    model.selectInputDirectory()
+
+    assert len(model.listModel.items) == 0
+    assert model.inputDirectory.text() == ''
+
+
+def test_select_output_directory(
+        qapp,
+        scene_with_undo_redo,
+        monkeypatch):
+    _, scene, undo_redo = scene_with_undo_redo
+
+    canvas = Canvas(scene, undo_redo)
+    model = Model(canvas)
+
+    monkeypatch.setattr(
+        QFileDialog,
+        'getExistingDirectory',
+        lambda *args: './resources'
+    )
+    model.selectOutputDirectory()
+
+    assert model.outputDirectory.text() == './resources'

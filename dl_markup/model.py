@@ -40,13 +40,16 @@ class Model:
             return
         segm = self.canvas.scene.segm
         out_path = os.path.join(
-                self.outputDirectory.text(),
-                self.workingImageName
+            self.outputDirectory.text(),
+            self.workingImageName
         )
         print("Saving image to", out_path)
         segm.save(out_path)
 
     def _updateFileList(self):
-        files = os.listdir(self.inputDirectory.text())
+        text = self.inputDirectory.text()
+        if not text:
+            return
+        files = os.listdir(text)
         print("Updating file list:", files)
         self.listModel.setItems(files)
