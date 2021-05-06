@@ -30,14 +30,24 @@ class Canvas(QtWidgets.QGraphicsView):
 
         :param e: event object
         """
+        scene_point = self.mapToScene(e.x(), e.y())
+
+        # cursor has moved outside of the scene
+        if scene_point.x() < 0 or \
+                scene_point.y() < 0 or \
+                scene_point.x() > self.scene.width() - 1 or \
+                scene_point.y() > self.scene.height() - 1:
+            self.last_x, self.last_y = None, None
+            return
+
         if self.last_x is None:  # First event.
-            self.last_x = e.x()
-            self.last_y = e.y()
+            self.last_x = scene_point.x()
+            self.last_y = scene_point.y()
             return  # Ignore the first time.
 
         cylinder = CylinderItem(
             QtCore.QPointF(self.last_x, self.last_y),
-            QtCore.QPointF(e.x(), e.y()),
+            QtCore.QPointF(scene_point.x(), scene_point.y()),
             self.brush_size,
             pen=QtGui.QPen(self.color),
             brush=QtGui.QBrush(self.color)
@@ -45,8 +55,8 @@ class Canvas(QtWidgets.QGraphicsView):
         self.undo_redo.insert_in_undo_redo_add(cylinder)
 
         # Update the origin for next time.
-        self.last_x = e.x()
-        self.last_y = e.y()
+        self.last_x = scene_point.x()
+        self.last_y = scene_point.y()
 
     def mouseReleaseEvent(self, e):
         """Clear mouse position info.
