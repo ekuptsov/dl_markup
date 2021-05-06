@@ -13,7 +13,9 @@ class CylinderItem(QtWidgets.QGraphicsItem):
             end: QtCore.QPointF,
             radius: float,
             pen: QtGui.QPen = None,
-            brush: QtGui.QBrush = None):
+            brush: QtGui.QBrush = None,
+            *args,
+            **kwargs):
         """Initialize CylinderItem.
 
         :param begin: first point
@@ -22,7 +24,7 @@ class CylinderItem(QtWidgets.QGraphicsItem):
         :param pen: QPen object with color information
         :param brush: QBrush object with color information
         """
-        super().__init__()
+        super().__init__(*args, **kwargs)
         self.__begin = begin
         self.__end = end
         self.__radius = radius

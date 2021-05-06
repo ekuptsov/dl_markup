@@ -28,29 +28,48 @@ class Scene(QtWidgets.QGraphicsScene):
 
     def clear(self):
         """Remove all primitives from scene, leaving background image."""
-        if self.__img_item is not None:
-            self.removeItem(self.__img_item)
+        img = self.img
         super().clear()
-        if self.__img_item is not None:
+        if img is not None:
+            self.__img_item = self.__get_img_item(img)
             self.addItem(self.__img_item)
+
+    @property
+    def img_item(self) -> QtWidgets.QGraphicsItem:
+        return self.__img_item
 
     @property
     def img(self) -> QtGui.QPixmap:
         """Background image."""
-        return self.__img_item.pixmap()
+        return self.__img_item.pixmap() if self.__img_item is not None else None
 
     @img.setter
     def img(self, val: QtGui.QPixmap):
+        child_items = []
         if self.__img_item is not None:
+            child_items = self.__img_item.childItems()
+            for item in child_items:
+                item.setParentItem(None)
             self.removeItem(self.__img_item)
-        img = self.__set_alpha(val, 0.8)
-        self.__img_item = QtWidgets.QGraphicsPixmapItem(img)
-        self.__img_item.setZValue(1.0)
+        val = self.__set_alpha(val, 0.8)
+        self.__img_item = self.__get_img_item(val)
+        for item in child_items:
+            item.setParentItem(self.__img_item)
         self.addItem(self.__img_item)
+
+    def __get_img_item(self, img: QtGui.QPixmap) -> QtWidgets.QGraphicsPixmapItem:
+        img_item = QtWidgets.QGraphicsPixmapItem(img)
+        img_item .setZValue(1.0)
+        flag = QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemClipsChildrenToShape
+        img_item.setFlag(flag)
+        return img_item
 
     @property
     def segm(self) -> QtGui.QPixmap:
         """Return current segmentation mask."""
+        child_items = self.__img_item.childItems()
+        for item in child_items:
+            item.setParentItem(None)
         self.removeItem(self.__img_item)
 
         segm = QtGui.QPixmap(self.width(), self.height())
@@ -60,4 +79,6 @@ class Scene(QtWidgets.QGraphicsScene):
         painter.end()
 
         self.addItem(self.__img_item)
+        for item in child_items:
+            item.setParentItem(self.__img_item)
         return segm
