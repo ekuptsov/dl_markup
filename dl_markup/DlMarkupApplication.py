@@ -19,20 +19,20 @@ class DlMarkupApplication:
         :param argv: command line arguments
         """
         self.app = QtWidgets.QApplication([])
-        self._retranslate()
+        self._setTranslation()
         scene = Scene(0, 0, 512, 512)
         undo_redo = UndoRedo(scene)
         canvas = Canvas(scene, undo_redo)
         model = Model(canvas)
         self.view = View(model, canvas)
 
-    def _retranslate(self):
-        """Retranslate UI to locale language."""
+    def _setTranslation(self):
+        """Set up translation to locale language."""
         locale_str = locale.getlocale(locale.LC_MESSAGES)[0]
-        translator = QTranslator()
+        self.translator = QTranslator()
         print("Locale:", locale_str)
-        translator.load(f"dl_markup.{locale_str}")
-        if not self.app.installTranslator(translator):
+        self.translator.load(f"dl_markup.{locale_str}")
+        if not self.app.installTranslator(self.translator):
             print("Can not install translation")
 
     def run(self) -> int:
