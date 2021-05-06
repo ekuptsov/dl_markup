@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from PyQt5 import QtWidgets
 
-from .scene import Scene
+from .Scene import Scene
 
 
 class ICommand(ABC):

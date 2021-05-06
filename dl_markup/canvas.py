@@ -1,8 +1,9 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtCore import Qt
-from .cylinder_item import CylinderItem
-from .scene import Scene
-from .undo_redo import UndoRedo
+
+from .CylinderItem import CylinderItem
+from .Scene import Scene
+from .UndoRedo import UndoRedo
 
 
 class Canvas(QtWidgets.QGraphicsView):

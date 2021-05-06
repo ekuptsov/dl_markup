@@ -7,8 +7,9 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtCore import QCoreApplication
 
 from functools import partial
-from .model import Model
-from .canvas import Canvas
+
+from .Model import Model
+from .Canvas import Canvas
 
 
 class View(QMainWindow):

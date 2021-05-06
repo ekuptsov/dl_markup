@@ -1,11 +1,12 @@
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QModelIndex
+
 import os
 import typing
 
-from .list_model import ListModel
-from .canvas import Canvas
+from .ListModel import ListModel
+from .Canvas import Canvas
 
 
 class Model:

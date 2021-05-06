@@ -1,12 +1,13 @@
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QTranslator
+
 import locale
 
-from .undo_redo import UndoRedo
-from .scene import Scene
-from .view import View
-from .model import Model
-from .canvas import Canvas
+from .UndoRedo import UndoRedo
+from .Scene import Scene
+from .View import View
+from .Model import Model
+from .Canvas import Canvas
 
 
 def main():
