@@ -30,6 +30,9 @@ class Canvas(QtWidgets.QGraphicsView):
 
         :param e: event object
         """
+        if self.scene.img_item is None:
+            return
+
         scene_point = self.mapToScene(e.x(), e.y())
 
         # cursor has moved outside of the scene
