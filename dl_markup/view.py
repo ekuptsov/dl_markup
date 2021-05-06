@@ -7,15 +7,20 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtCore import QCoreApplication
 
 from functools import partial
-from .model import Model
-from .canvas import Canvas
+
+from .Model import Model
+from .Canvas import Canvas
 
 
 class View(QMainWindow):
-    """
-    Application view
-    """
+    """Application view according to MVC pattern."""
+
     def __init__(self, model: Model, canvas: Canvas):
+        """Assemble UI from separate widgets.
+
+        :param model: object that stores application data
+        :param canvas: object for drawing
+        """
         super().__init__()
         self.setWindowTitle("DL Markup")
 
@@ -39,12 +44,34 @@ class View(QMainWindow):
         self._createToolbar(model, canvas)
 
     def _createToolbar(self, model: Model, canvas: Canvas):
+        """Create toolbar with control buttons."""
         tools = QToolBar()
         self.addToolBar(tools)
-        tools.addAction(QCoreApplication.translate('View', 'Select input directory'), model.selectInputDirectory)
-        tools.addAction(QCoreApplication.translate('View', 'Select output directory'), model.selectOutputDirectory)
-        tools.addAction(QCoreApplication.translate('View', 'Open'), partial(model.open, self.fileList.selectedIndexes))
-        tools.addAction(QCoreApplication.translate('View', 'Save'), model.save)
-        tools.addAction(QCoreApplication.translate('View', 'Undo'), partial(canvas.undo_redo.undo, levels=1))
-        tools.addAction(QCoreApplication.translate('View', 'Redo'), partial(canvas.undo_redo.redo, levels=1))
-        tools.addAction(QCoreApplication.translate('View', 'Clear'), canvas.clear)
+        tools.addAction(
+            QCoreApplication.translate('View', 'Select input directory'),
+            model.selectInputDirectory
+        )
+        tools.addAction(
+            QCoreApplication.translate('View', 'Select output directory'),
+            model.selectOutputDirectory
+        )
+        tools.addAction(
+            QCoreApplication.translate('View', 'Open'),
+            partial(model.open, self.fileList.selectedIndexes)
+        )
+        tools.addAction(
+            QCoreApplication.translate('View', 'Save'),
+            model.save
+        )
+        tools.addAction(
+            QCoreApplication.translate('View', 'Undo'),
+            partial(canvas.undo_redo.undo, levels=1)
+        )
+        tools.addAction(
+            QCoreApplication.translate('View', 'Redo'),
+            partial(canvas.undo_redo.redo, levels=1)
+        )
+        tools.addAction(
+            QCoreApplication.translate('View', 'Clear'),
+            canvas.clear
+        )

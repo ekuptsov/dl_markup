@@ -1,13 +1,22 @@
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QFileDialog
-import os
+from PyQt5.QtCore import QModelIndex
 
-from .list_model import ListModel
+import os
+import typing
+
+from .ListModel import ListModel
+from .Canvas import Canvas
 
 
 class Model:
+    """Store application model according to MVC pattern."""
 
-    def __init__(self, canvas):
+    def __init__(self, canvas: Canvas):
+        """Initialize all data objects.
+
+        :param canvas: Canvas object for drawing
+        """
         self.canvas = canvas
         self.inputDirectory = QLabel('.')
         self.outputDirectory = QLabel('.')
@@ -15,13 +24,19 @@ class Model:
         self.workingImageName = None
 
     def selectInputDirectory(self):
+        """Select input directory by file dialog."""
         self.inputDirectory.setText(QFileDialog.getExistingDirectory())
-        self._updateFileList()
+        self.updateFileList()
 
     def selectOutputDirectory(self):
+        """Select output directory by file dialog."""
         self.outputDirectory.setText(QFileDialog.getExistingDirectory())
 
-    def open(self, get_indexes):
+    def open(self, get_indexes: typing.Callable[[], typing.List[QModelIndex]]):
+        """Load selected image to canvas.
+
+        :param get_indexes: function, which produces indexes of selected items
+        """
         indexes = get_indexes()
         if indexes:
             index = indexes[0].row()
@@ -34,7 +49,7 @@ class Model:
             self.canvas.updateBackgroundImage(img_path)
 
     def save(self):
-        print("Save called")
+        """Save segmentation to file."""
         if self.workingImageName is None:
             print("Working image is unknown. Skip saving.")
             return
@@ -46,7 +61,8 @@ class Model:
         print("Saving image to", out_path)
         segm.save(out_path)
 
-    def _updateFileList(self):
+    def updateFileList(self):
+        """Update list of files in selected input directory."""
         files = os.listdir(self.inputDirectory.text())
         print("Updating file list:", files)
         self.listModel.setItems(files)
