@@ -17,7 +17,7 @@ class View(QMainWindow):
 
     def __init__(self, model: Model, canvas: Canvas):
         """Assemble UI from separate widgets.
-        
+
         :param model: object that stores application data
         :param canvas: object for drawing
         """

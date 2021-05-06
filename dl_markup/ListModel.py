@@ -8,7 +8,7 @@ class ListModel(QtCore.QAbstractListModel):
 
     def __init__(self, *args, items: list = None, **kwargs):
         """Create a new ListModel object.
-        
+
         :param items: list of initial values
         """
         super().__init__(*args, **kwargs)

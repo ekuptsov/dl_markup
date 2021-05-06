@@ -14,7 +14,7 @@ class Scene(QtWidgets.QGraphicsScene):
 
     def __set_alpha(self, img: QtGui.QPixmap, alpha: float) -> QtGui.QPixmap:
         """Create new image with another opacity.
-        
+
         :param img: original image
         :param alpha: opacity value from interval [0, 1]
         """

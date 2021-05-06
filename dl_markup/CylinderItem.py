@@ -15,7 +15,7 @@ class CylinderItem(QtWidgets.QGraphicsItem):
             pen: QtGui.QPen = None,
             brush: QtGui.QBrush = None):
         """Initialize CylinderItem.
-        
+
         :param begin: first point
         :param end: second point
         :param raduis: size of circles
