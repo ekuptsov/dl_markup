@@ -6,8 +6,16 @@ from .undo_redo import UndoRedo
 
 
 class Canvas(QtWidgets.QGraphicsView):
+    """A class capable of user interaction with scene.
+    Inherits QtWidgets.QGraphicsView, so it can be placed in layout.
+    """
 
     def __init__(self, scene: Scene, undo_redo: UndoRedo):
+        """Creates a new canvas.
+
+        :param scene: scene object for drawing
+        :param undo_redo: an object for storing history
+        """
         super().__init__(scene)
         self.scene = scene
         self.undo_redo = undo_redo
@@ -16,6 +24,10 @@ class Canvas(QtWidgets.QGraphicsView):
         self.last_x, self.last_y = None, None
 
     def mouseMoveEvent(self, e):
+        """Draw cylinder between previous and current mouse positions.
+
+        :param e: event object
+        """
         if self.last_x is None:  # First event.
             self.last_x = e.x()
             self.last_y = e.y()
@@ -35,10 +47,18 @@ class Canvas(QtWidgets.QGraphicsView):
         self.last_y = e.y()
 
     def mouseReleaseEvent(self, e):
+        """Clear mouse position info.
+
+        :param e: event object
+        """
         self.last_x = None
         self.last_y = None
 
     def keyPressEvent(self, e):
+        """Change brush size by pressing '+' and '-' buttons
+
+        :param e: event object
+        """
         if e.key() == Qt.Key_Plus or e.key() == Qt.Key_Equal:
             self.brush_size = self.brush_size + 1
         elif e.key() == Qt.Key_Minus:
@@ -48,9 +68,14 @@ class Canvas(QtWidgets.QGraphicsView):
         print("New brush size:", self.brush_size)
 
     def clear(self):
+        """Clear scene and history."""
         self.scene.clear()
         self.undo_redo.clear()
 
     def updateBackgroundImage(self, img_path: str):
+        """Update background image with clearing current segmentation.
+
+        :param img_path: path to new background image
+        """
         self.clear()
         self.scene.img = QtGui.QPixmap(img_path)
