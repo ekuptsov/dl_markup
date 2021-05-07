@@ -8,6 +8,7 @@ class Scene(QtWidgets.QGraphicsScene):
         """Initialize scene."""
         super().__init__(*argc, **kwargs)
         self.__img_item = None
+        self.__background_item = None  # parent to all other items (except img)
         self.setBackgroundBrush(QtGui.QBrush(
             QtGui.QColor(0, 0, 0)
         ))
@@ -28,15 +29,29 @@ class Scene(QtWidgets.QGraphicsScene):
 
     def clear(self):
         """Remove all primitives from scene, leaving background image."""
-        img = self.img
+        if self.__img_item is not None:
+            self.removeItem(self.__img_item)
         super().clear()
-        if img is not None:
-            self.__img_item = self.__get_img_item(img)
+        if self.__img_item is not None:
             self.addItem(self.__img_item)
+            self.__background_item = self.__get_background_item(
+                self.img.width(),
+                self.img.height(),
+            )
+            self.addItem(self.__background_item)
 
     @property
-    def img_item(self) -> QtWidgets.QGraphicsItem:
+    def img_item(self) -> QtWidgets.QGraphicsPixmapItem:
+        """Drawing item with background image."""
         return self.__img_item
+
+    @property
+    def background_item(self) -> QtWidgets.QGraphicsPixmapItem:
+        """Drawing item with empty background.
+
+        This serves as parent for every other item (except actual background image)
+        """
+        return self.__background_item
 
     @property
     def img(self) -> QtGui.QPixmap:
@@ -45,35 +60,46 @@ class Scene(QtWidgets.QGraphicsScene):
 
     @img.setter
     def img(self, val: QtGui.QPixmap):
-        # remove current image item (but save its childrens)
+        # remove current image item and background item
         child_items = []
         if self.__img_item is not None:
-            child_items = self.__img_item.childItems()
+            child_items = self.__background_item.childItems()
             for item in child_items:
                 item.setParentItem(None)
             self.removeItem(self.__img_item)
-        # create new image item and set its childrens
+            self.removeItem(self.__background_item)
+        # create new img item
         val = self.__set_alpha(val, 0.8)
         self.__img_item = self.__get_img_item(val)
-        for item in child_items:
-            item.setParentItem(self.__img_item)
         self.addItem(self.__img_item)
+        # create background item and set its children
+        self.__background_item = self.__get_background_item(
+            val.width(),
+            val.height(),
+        )
+        for item in child_items:
+            item.setParentItem(self.__background_item)
+        self.addItem(self.__background_item)
         # chage bounding rectangle accoring to new image size
         self.setSceneRect(0, 0, val.width(), val.height())
 
     def __get_img_item(self, img: QtGui.QPixmap) -> QtWidgets.QGraphicsPixmapItem:
         img_item = QtWidgets.QGraphicsPixmapItem(img)
         img_item .setZValue(1.0)
-        flag = QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemClipsChildrenToShape
-        img_item.setFlag(flag)
         return img_item
+
+    def __get_background_item(self, width: int, height: int) -> QtWidgets.QGraphicsPixmapItem:
+        background = QtGui.QPixmap(width, height)
+        background.fill(QtGui.QColor(0, 0, 0))
+        # set this flag to prevent drawing mask outside of image
+        flag = QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemClipsChildrenToShape
+        background_item = QtWidgets.QGraphicsPixmapItem(background)
+        background_item.setFlag(flag)
+        return background_item
 
     @property
     def segm(self) -> QtGui.QPixmap:
         """Return current segmentation mask."""
-        child_items = self.__img_item.childItems()
-        for item in child_items:
-            item.setParentItem(None)
         self.removeItem(self.__img_item)
 
         segm = QtGui.QPixmap(self.width(), self.height())
@@ -83,6 +109,4 @@ class Scene(QtWidgets.QGraphicsScene):
         painter.end()
 
         self.addItem(self.__img_item)
-        for item in child_items:
-            item.setParentItem(self.__img_item)
         return segm

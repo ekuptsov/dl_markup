@@ -54,7 +54,7 @@ class Canvas(QtWidgets.QGraphicsView):
             self.brush_size,
             pen=QtGui.QPen(self.color),
             brush=QtGui.QBrush(self.color),
-            parent=self.scene.img_item,
+            parent=self.scene.background_item,
         )
         self.undo_redo.insert_in_undo_redo_add(cylinder)
 
