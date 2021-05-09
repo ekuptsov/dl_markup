@@ -36,7 +36,8 @@ class AddCommand(ICommand):
 
     def execute(self):
         """Add item to scene."""
-        self.__scene.addItem(self.__item)
+        if self.__item not in self.__scene.items():
+            self.__scene.addItem(self.__item)
 
     def un_execute(self):
         """Remove item from scene."""

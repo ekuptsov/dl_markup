@@ -24,29 +24,53 @@ class Canvas(QtWidgets.QGraphicsView):
         self.color = QtGui.QColor(0, 255, 0)
         self.brush_size = 20
         self.last_x, self.last_y = None, None
+        self.zoom_factor = 1.04
+        self.mouse_pressed = False
 
     def mouseMoveEvent(self, e):
         """Draw cylinder between previous and current mouse positions.
 
         :param e: event object
         """
+        if self.scene.img_item is None:
+            return
+        if not self.mouse_pressed:
+            return
+
+        scene_point = self.mapToScene(e.pos())
+
+        # cursor has moved outside of the scene
+        if scene_point.x() < 0 or \
+                scene_point.y() < 0 or \
+                scene_point.x() > self.scene.width() - 1 or \
+                scene_point.y() > self.scene.height() - 1:
+            self.last_x, self.last_y = None, None
+            return
+
         if self.last_x is None:  # First event.
-            self.last_x = e.x()
-            self.last_y = e.y()
+            self.last_x = scene_point.x()
+            self.last_y = scene_point.y()
             return  # Ignore the first time.
 
         cylinder = CylinderItem(
             QtCore.QPointF(self.last_x, self.last_y),
-            QtCore.QPointF(e.x(), e.y()),
+            QtCore.QPointF(scene_point.x(), scene_point.y()),
             self.brush_size,
             pen=QtGui.QPen(self.color),
-            brush=QtGui.QBrush(self.color)
+            brush=QtGui.QBrush(self.color),
+            parent=self.scene.background_item,
         )
         self.undo_redo.insert_in_undo_redo_add(cylinder)
 
         # Update the origin for next time.
-        self.last_x = e.x()
-        self.last_y = e.y()
+        self.last_x = scene_point.x()
+        self.last_y = scene_point.y()
+
+    def mousePressEvent(self, e):
+        scene_point = self.mapToScene(e.pos())
+        self.last_x = scene_point.x()
+        self.last_y = scene_point.y()
+        self.mouse_pressed = True
 
     def mouseReleaseEvent(self, e):
         """Clear mouse position info.
@@ -55,6 +79,7 @@ class Canvas(QtWidgets.QGraphicsView):
         """
         self.last_x = None
         self.last_y = None
+        self.mouse_pressed = False
 
     def keyPressEvent(self, e):
         """Change brush size by pressing '+' and '-' buttons.
@@ -68,6 +93,27 @@ class Canvas(QtWidgets.QGraphicsView):
         else:
             return
         print("New brush size:", self.brush_size)
+
+    def wheelEvent(self, e):
+        if e.modifiers() & QtCore.Qt.ControlModifier:
+            self._zoom(e.angleDelta())
+        else:
+            super().wheelEvent(e)
+
+    def _zoom(self, angle_delta: QtCore.QPointF):
+        # set new anchor
+        old_anchor = self.transformationAnchor()
+        new_anchor = QtWidgets.QGraphicsView.ViewportAnchor.AnchorViewCenter
+        self.setTransformationAnchor(new_anchor)
+
+        # zoom
+        zoom_factor = self.zoom_factor
+        if angle_delta.y() < 0:
+            zoom_factor = 1 / self.zoom_factor
+        self.scale(zoom_factor, zoom_factor)
+
+        # reset old anchor
+        self.setTransformationAnchor(old_anchor)
 
     def clear(self):
         """Clear scene and history."""

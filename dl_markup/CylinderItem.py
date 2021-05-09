@@ -13,7 +13,9 @@ class CylinderItem(QtWidgets.QGraphicsItem):
             end: QtCore.QPointF,
             radius: float,
             pen: QtGui.QPen = None,
-            brush: QtGui.QBrush = None):
+            brush: QtGui.QBrush = None,
+            *args,
+            **kwargs):
         """Initialize CylinderItem.
 
         :param begin: first point
@@ -22,13 +24,14 @@ class CylinderItem(QtWidgets.QGraphicsItem):
         :param pen: QPen object with color information
         :param brush: QBrush object with color information
         """
-        super().__init__()
+        super().__init__(*args, **kwargs)
         self.__begin = begin
         self.__end = end
         self.__radius = radius
         self.__pen = pen
         self.__brush = brush
         self.__create_parts()
+        self.__compute_bounding_rect()
 
     def __create_parts(self):
         """Create circles and rectangle."""
@@ -62,15 +65,11 @@ class CylinderItem(QtWidgets.QGraphicsItem):
             2 * self.__radius,
             2 * self.__radius
         )
-        self.__ellipse_1.setPen(self.__pen)
-        self.__ellipse_1.setBrush(self.__brush)
-        self.__ellipse_2.setPen(self.__pen)
-        self.__ellipse_2.setBrush(self.__brush)
-        self.__polygon.setPen(self.__pen)
-        self.__polygon.setBrush(self.__brush)
+        for item in (self.__ellipse_1, self.__ellipse_2, self.__polygon):
+            item.setPen(self.__pen)
+            item.setBrush(self.__brush)
 
-    def boundingRect(self) -> QtCore.QRectF:
-        """Create bounding box for current item."""
+    def __compute_bounding_rect(self):
         x = [
             self.__begin.x() - self.__radius,
             self.__begin.x() + self.__radius,
@@ -83,7 +82,11 @@ class CylinderItem(QtWidgets.QGraphicsItem):
             self.__end.y() - self.__radius,
             self.__end.y() + self.__radius,
         ]
-        return QtCore.QRectF(min(x), min(y), max(x), max(y))
+        self.__bounding_rect = QtCore.QRectF(min(x), min(y), max(x), max(y))
+
+    def boundingRect(self) -> QtCore.QRectF:
+        """Create bounding box for current item."""
+        return self.__bounding_rect
 
     def paint(
             self,
@@ -91,6 +94,5 @@ class CylinderItem(QtWidgets.QGraphicsItem):
             option: QtWidgets.QStyleOptionGraphicsItem,
             widget: QtWidgets.QWidget):
         """Paint item."""
-        self.__ellipse_1.paint(painter, option, widget)
-        self.__ellipse_2.paint(painter, option, widget)
-        self.__polygon.paint(painter, option, widget)
+        for item in (self.__ellipse_1, self.__ellipse_2, self.__polygon):
+            item.paint(painter, option, widget)

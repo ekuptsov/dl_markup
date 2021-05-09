@@ -25,12 +25,16 @@ class Model:
 
     def selectInputDirectory(self):
         """Select input directory by file dialog."""
-        self.inputDirectory.setText(QFileDialog.getExistingDirectory())
-        self.updateFileList()
+        text = QFileDialog.getExistingDirectory()
+        if text:
+            self.inputDirectory.setText(text)
+            self.updateFileList()
 
     def selectOutputDirectory(self):
         """Select output directory by file dialog."""
-        self.outputDirectory.setText(QFileDialog.getExistingDirectory())
+        text = QFileDialog.getExistingDirectory()
+        if text:
+            self.outputDirectory.setText(text)
 
     def open(self, get_indexes: typing.Callable[[], typing.List[QModelIndex]]):
         """Load selected image to canvas.

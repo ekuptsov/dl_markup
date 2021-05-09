@@ -23,6 +23,7 @@ class DlMarkupApplication:
         scene = Scene(0, 0, 512, 512)
         undo_redo = UndoRedo(scene)
         canvas = Canvas(scene, undo_redo)
+        canvas.setViewport(QtWidgets.QOpenGLWidget())
         model = Model(canvas)
         self.view = View(model, canvas)
 

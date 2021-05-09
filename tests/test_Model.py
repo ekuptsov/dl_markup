@@ -43,7 +43,7 @@ def test_select_input_directory_2(
     model.selectInputDirectory()
 
     assert len(model.listModel.items) == 0
-    assert model.inputDirectory.text() == ''
+    assert model.inputDirectory.text() == '.'
 
 
 def test_select_output_directory(
