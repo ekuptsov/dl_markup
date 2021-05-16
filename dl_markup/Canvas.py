@@ -1,5 +1,6 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QCursor, QPixmap, QPainter
 
 from .CylinderItem import CylinderItem
 from .Scene import Scene
@@ -23,9 +24,44 @@ class Canvas(QtWidgets.QGraphicsView):
         self.undo_redo = undo_redo
         self.color = QtGui.QColor(0, 255, 0)
         self.brush_size = 20
+
+        # self.setCursor(Qt.CrossCursor)
+
         self.last_x, self.last_y = None, None
         self.zoom_factor = 1.04
         self.mouse_pressed = False
+
+    @property
+    def brush_size(self):
+        return self._brush_size
+
+    @brush_size.setter
+    def brush_size(self, value):
+        self._brush_size = value
+        # redraw cursor in view
+        self.setCursor(self._CircleCursor())
+
+    @brush_size.deleter
+    def brush_size(self):
+        del self._brush_size
+
+    def _CircleCursor(self):
+        """Draw a circle cursor of the same size as brush."""
+        size = 128
+        pixmap = QPixmap(size, size)
+        pixmap.fill(Qt.GlobalColor.transparent)
+
+        # draw circle on pixmap
+        painter = QPainter()
+        painter.begin(pixmap)
+        width = self.brush_size * 2
+        height = self.brush_size * 2
+        left = (size - width) // 2
+        top = (size - height) // 2
+        # draw bbox in (left, top) with size (width, height)
+        painter.drawEllipse(left, top, width, height)
+        painter.end()
+        return QCursor(pixmap)
 
     def mouseMoveEvent(self, e):
         """Draw cylinder between previous and current mouse positions.
@@ -92,6 +128,7 @@ class Canvas(QtWidgets.QGraphicsView):
             self.brush_size = max(1, self.brush_size - 1)
         else:
             return
+        self.setCursor(self._CircleCursor())
         print("New brush size:", self.brush_size)
 
     def wheelEvent(self, e):
