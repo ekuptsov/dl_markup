@@ -4,9 +4,10 @@ import argparse
 from .DLMarkupApplication import DLMarkupApplication
 
 parser = argparse.ArgumentParser(description='Markup tool for deep learning')
-parser.add_argument('--input_dir', help='Input directory for images')
+parser.add_argument('--input_dir', default='./', help='Input directory for images')
 parser.add_argument(
     '--output_dir',
+    default='./',
     help='Output directory for marked images')
 
 

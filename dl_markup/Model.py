@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QModelIndex
 
@@ -13,14 +13,14 @@ class Model:
     """Store application model according to MVC pattern."""
 
     # def __init__(self, canvas: Canvas, input_dir: str, output_dir: str):
-    def __init__(self, canvas: Canvas, input_dir: str = None, output_dir: str = None):
+    def __init__(self, canvas: Canvas, input_dir: str, output_dir: str):
         """Initialize all data objects.
 
         :param canvas: Canvas object for drawing
         """
         self.canvas = canvas
-        self.inputDirectory = QLabel(input_dir)
-        self.outputDirectory = QLabel(output_dir)
+        self.inputDirectory = QLineEdit(os.path.abspath(input_dir))
+        self.outputDirectory = QLineEdit(os.path.abspath(output_dir))
         self.listModel = ListModel()
         self.workingImageName = None
         if input_dir is not None:
@@ -42,18 +42,20 @@ class Model:
     def open(self, get_indexes: typing.Callable[[], typing.List[QModelIndex]]):
         """Load selected image to canvas.
 
+        If image has already opened, nothing is changed.
         :param get_indexes: function, which produces indexes of selected items
         """
         indexes = get_indexes()
         if indexes:
             index = indexes[0].row()
-            self.workingImageName = self.listModel.items[index]
-            img_path = os.path.join(
-                self.inputDirectory.text(),
-                self.workingImageName
-            )
-            print("Reading image from", img_path)
-            self.canvas.updateBackgroundImage(img_path)
+            if self.workingImageName != self.listModel.items[index]:
+                self.workingImageName = self.listModel.items[index]
+                img_path = os.path.join(
+                    self.inputDirectory.text(),
+                    self.workingImageName
+                )
+                print("Reading image from", img_path)
+                self.canvas.updateBackgroundImage(img_path)
 
     def save(self):
         """Save segmentation to file."""

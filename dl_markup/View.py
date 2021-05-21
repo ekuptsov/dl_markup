@@ -4,6 +4,8 @@ from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QToolBar
 from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtCore import QCoreApplication
 
 from functools import partial
@@ -29,36 +31,51 @@ class View(QMainWindow):
         self.setCentralWidget(centralWidget)
         centralWidget.setLayout(mainLayout)
 
-        mainLayout.addWidget(model.inputDirectory)
-        mainLayout.addWidget(model.outputDirectory)
+        input_bar = QHBoxLayout()
+        input_bar.addWidget(QLabel("Input directory"))
+        model.inputDirectory.editingFinished.connect(model.updateFileList)
+        input_bar.addWidget(model.inputDirectory)
+        change_input_bt = QPushButton("Change")
+        change_input_bt.clicked.connect(model.selectInputDirectory)
+        input_bar.addWidget(change_input_bt)
+        mainLayout.addLayout(input_bar)
+
+        output_bar = QHBoxLayout()
+        output_bar.addWidget(QLabel("Output directory"))
+        output_bar.addWidget(model.outputDirectory)
+        change_output_bt = QPushButton("Change")
+        change_output_bt.clicked.connect(model.selectOutputDirectory)
+        output_bar.addWidget(change_output_bt)
+        mainLayout.addLayout(output_bar)
 
         layout = QHBoxLayout()
         mainLayout.addLayout(layout)
 
-        self.fileList = QListView()
-        self.fileList.setModel(model.listModel)
-        layout.addWidget(self.fileList)
+        # imageList = QImageListWidget(model)
+        fileList = QListView()
+        fileList.setModel(model.listModel)
+        fileList.clicked.connect(partial(model.open, fileList.selectedIndexes))
+        layout.addWidget(fileList)
 
         layout.addWidget(canvas)
-
         self._createToolbar(model, canvas)
 
     def _createToolbar(self, model: Model, canvas: Canvas):
         """Create toolbar with control buttons."""
         tools = QToolBar()
         self.addToolBar(tools)
-        tools.addAction(
-            QCoreApplication.translate('View', 'Select input directory'),
-            model.selectInputDirectory
-        )
-        tools.addAction(
-            QCoreApplication.translate('View', 'Select output directory'),
-            model.selectOutputDirectory
-        )
-        tools.addAction(
-            QCoreApplication.translate('View', 'Open'),
-            partial(model.open, self.fileList.selectedIndexes)
-        )
+        # tools.addAction(
+        #     QCoreApplication.translate('View', 'Select input directory'),
+        #     model.selectInputDirectory
+        # )
+        # tools.addAction(
+        #     QCoreApplication.translate('View', 'Select output directory'),
+        #     model.selectOutputDirectory
+        # )
+        # tools.addAction(
+        #     QCoreApplication.translate('View', 'Open'),
+        #     partial(model.open, self.fileList.selectedIndexes)
+        # )
         tools.addAction(
             QCoreApplication.translate('View', 'Save'),
             model.save
