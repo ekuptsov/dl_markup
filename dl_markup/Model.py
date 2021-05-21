@@ -12,16 +12,19 @@ from .Canvas import Canvas
 class Model:
     """Store application model according to MVC pattern."""
 
-    def __init__(self, canvas: Canvas):
+    # def __init__(self, canvas: Canvas, input_dir: str, output_dir: str):
+    def __init__(self, canvas: Canvas, input_dir: str = None, output_dir: str = None):
         """Initialize all data objects.
 
         :param canvas: Canvas object for drawing
         """
         self.canvas = canvas
-        self.inputDirectory = QLabel('.')
-        self.outputDirectory = QLabel('.')
+        self.inputDirectory = QLabel(input_dir)
+        self.outputDirectory = QLabel(output_dir)
         self.listModel = ListModel()
         self.workingImageName = None
+        if input_dir is not None:
+            self.updateFileList()
 
     def selectInputDirectory(self):
         """Select input directory by file dialog."""

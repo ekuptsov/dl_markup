@@ -1,9 +1,18 @@
 import sys
+import argparse
 
-from .DlMarkupApplication import DlMarkupApplication
+from .DLMarkupApplication import DLMarkupApplication
+
+parser = argparse.ArgumentParser(description='Markup tool for deep learning')
+parser.add_argument('--input_dir', help='Input directory for images')
+parser.add_argument(
+    '--output_dir',
+    help='Output directory for marked images')
 
 
 def main():
     """Entry point."""
-    app = DlMarkupApplication(sys.argv)
+    args = parser.parse_args()
+    print(args)
+    app = DLMarkupApplication(args.__dict__)
     sys.exit(app.run())
