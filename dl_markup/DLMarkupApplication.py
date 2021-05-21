@@ -10,10 +10,10 @@ from .Model import Model
 from .Canvas import Canvas
 
 
-class DlMarkupApplication:
+class DLMarkupApplication:
     """Application class to connect all parts together."""
 
-    def __init__(self, *args):
+    def __init__(self, args):
         """Initialize application.
 
         :param args: command line arguments
@@ -24,7 +24,7 @@ class DlMarkupApplication:
         undo_redo = UndoRedo(scene)
         canvas = Canvas(scene, undo_redo)
         canvas.setViewport(QtWidgets.QOpenGLWidget())
-        model = Model(canvas. args)
+        model = Model(canvas, **args)
         self.view = View(model, canvas)
 
     def _setTranslation(self):
