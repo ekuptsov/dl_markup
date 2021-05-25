@@ -25,11 +25,13 @@ class Canvas(QtWidgets.QGraphicsView):
         self.color = QtGui.QColor(0, 255, 0)
         self.brush_size = 20
 
-        # self.setCursor(Qt.CrossCursor)
-
         self.last_x, self.last_y = None, None
+        self.zoom = 1.
         self.zoom_factor = 1.04
         self.mouse_pressed = False
+
+    def changeBrushColor(self, color: str):
+        self.color = QtGui.QColor(color)
 
     @property
     def brush_size(self):
@@ -39,13 +41,13 @@ class Canvas(QtWidgets.QGraphicsView):
     def brush_size(self, value):
         self._brush_size = value
         # redraw cursor in view
-        self.setCursor(self._CircleCursor())
+        self.setCursor(self._CircleCursor(value * 2))
 
     @brush_size.deleter
     def brush_size(self):
         del self._brush_size
 
-    def _CircleCursor(self):
+    def _CircleCursor(self, diameter):
         """Draw a circle cursor of the same size as brush."""
         size = 128
         pixmap = QPixmap(size, size)
@@ -54,12 +56,10 @@ class Canvas(QtWidgets.QGraphicsView):
         # draw circle on pixmap
         painter = QPainter()
         painter.begin(pixmap)
-        width = self.brush_size * 2
-        height = self.brush_size * 2
-        left = (size - width) // 2
-        top = (size - height) // 2
-        # draw bbox in (left, top) with size (width, height)
-        painter.drawEllipse(left, top, width, height)
+        left = (size - diameter) // 2
+        top = (size - diameter) // 2
+        # draw bbox in (left, top) with size (diameter, diameter)
+        painter.drawEllipse(left, top, diameter, diameter)
         painter.end()
         return QCursor(pixmap)
 
@@ -128,7 +128,7 @@ class Canvas(QtWidgets.QGraphicsView):
             self.brush_size = max(1, self.brush_size - 1)
         else:
             return
-        self.setCursor(self._CircleCursor())
+        # self.setCursor(self._CircleCursor())
         print("New brush size:", self.brush_size)
 
     def wheelEvent(self, e):
@@ -147,7 +147,10 @@ class Canvas(QtWidgets.QGraphicsView):
         zoom_factor = self.zoom_factor
         if angle_delta.y() < 0:
             zoom_factor = 1 / self.zoom_factor
+        self.zoom *= zoom_factor
         self.scale(zoom_factor, zoom_factor)
+        # dont forget about cursor
+        self.setCursor(self._CircleCursor(self.zoom * self.brush_size * 2))
 
         # reset old anchor
         self.setTransformationAnchor(old_anchor)
