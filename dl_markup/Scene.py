@@ -69,7 +69,7 @@ class Scene(QtWidgets.QGraphicsScene):
             self.removeItem(self.__img_item)
             self.removeItem(self.__background_item)
         # create new img item
-        val = self.__set_alpha(val, 0.8)
+        val = self.__set_alpha(val, 0.7)
         self.__img_item = self.__get_img_item(val)
         self.addItem(self.__img_item)
         # create background item and set its children

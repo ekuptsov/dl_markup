@@ -12,6 +12,7 @@ from functools import partial
 
 from .Model import Model
 from .Canvas import Canvas
+from .Palette import Palette
 
 
 class View(QMainWindow):
@@ -59,6 +60,13 @@ class View(QMainWindow):
 
         layout.addWidget(canvas)
         self._createToolbar(model, canvas)
+
+        right_layout = QVBoxLayout()
+        right_layout.addStretch(1)
+        palette = Palette()
+        palette.bindButtons(model.canvas)
+        right_layout.addWidget(palette)
+        layout.addLayout(right_layout)
 
     def _createToolbar(self, model: Model, canvas: Canvas):
         """Create toolbar with control buttons."""
