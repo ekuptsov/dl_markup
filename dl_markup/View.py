@@ -63,6 +63,7 @@ class View(QMainWindow):
 
         right_layout = QVBoxLayout()
         right_layout.addStretch(1)
+
         palette = Palette()
         palette.bindButtons(model.canvas)
         right_layout.addWidget(palette)
