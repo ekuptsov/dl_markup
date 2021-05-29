@@ -9,10 +9,9 @@ from .Canvas import Canvas
 
 class Palette(QWidget):
 
-    colors_hex = ['#000000', '#FFFFFF', '#FF0000', '#00FF00',
-                  '#0000FF', '#FFFF00', '#00FFFF', '#FF00FF',
-                  '#800000', '#808000', '#008000', '#800080',
-                  '#000080']
+    colors_hex = ['#00FF00', '#FFFFFF', '#FF0000', '#0000FF',
+                  '#FFFF00', '#00FFFF', '#FF00FF', '#800000',
+                  '#808000', '#008000', '#800080', '#000080']
     size = 100, 50
 
     def __init__(self, itemsInRow=4, parent=None):
@@ -49,6 +48,9 @@ class Palette(QWidget):
             bt.setCheckable(True)
             bt.clicked.connect(self.changePressedButton)
             bt.clicked.connect(partial(color_change, f'{color}'))
+            if color == '#00FF00':  # green default color
+                bt.setChecked(True)
+                self.pressedButton = bt
 
     def changePressedButton(self):
         sender = self.sender()

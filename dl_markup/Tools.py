@@ -92,6 +92,8 @@ class Brush:
         self.last_y = scene_point.y()
 
     def mousePressEvent(self, e):
+        if e.button() == Qt.RightButton:
+            self.color = QtGui.QColor(0, 0, 0)
         scene_point = self.canvas.mapToScene(e.pos())
         self.last_x = scene_point.x()
         self.last_y = scene_point.y()
