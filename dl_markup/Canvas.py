@@ -28,6 +28,11 @@ class Canvas(QtWidgets.QGraphicsView):
         self.zoom = 1.
         self.zoom_factor = 1.04
 
+    def changeTool(self, buttons):
+        sender = self.sender()
+        prev_button = buttons[sender == buttons[0]]
+        prev_button.setChecked(False)
+
     def changeBrushColor(self, color: str):
         self.tool.color = QtGui.QColor(color)
 

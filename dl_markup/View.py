@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtCore import Qt
 
 from functools import partial
 
@@ -52,22 +53,44 @@ class View(QMainWindow):
         layout = QHBoxLayout()
         mainLayout.addLayout(layout)
 
-        # imageList = QImageListWidget(model)
         fileList = QListView()
         fileList.setModel(model.listModel)
         fileList.clicked.connect(partial(model.open, fileList.selectedIndexes))
         layout.addWidget(fileList)
 
         layout.addWidget(canvas)
+
         self._createToolbar(model, canvas)
 
         right_layout = QVBoxLayout()
         right_layout.addStretch(1)
-
+        mode = self._createModeButtons(canvas)
+        right_layout.addLayout(mode)
         palette = Palette()
-        palette.bindButtons(model.canvas)
+        palette.bindButtons(canvas)
         right_layout.addWidget(palette)
         layout.addLayout(right_layout)
+
+    def _createModeButtons(self, canvas: Canvas):
+        mode = QVBoxLayout()
+        title = QLabel('Markup mode')
+        title.setAlignment(Qt.AlignHCenter)
+        mode.addWidget(title)
+        bt_layout = QHBoxLayout()
+        brush = QPushButton("Brush")
+        polygon = QPushButton("Polygon")
+        brush.setCheckable(True)
+        polygon.setCheckable(True)
+        brush.setChecked(True)
+        buttons = [brush, polygon]
+        slot = partial(canvas.changeTool, buttons)
+        brush.clicked.connect(slot)
+        brush.clicked.emit()
+        polygon.clicked.connect(slot)
+        bt_layout.addWidget(brush)
+        bt_layout.addWidget(polygon)
+        mode.addLayout(bt_layout)
+        return mode
 
     def _createToolbar(self, model: Model, canvas: Canvas):
         """Create toolbar with control buttons."""
