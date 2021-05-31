@@ -122,38 +122,82 @@ class Brush:
         # self.setCursor(self._CircleCursor())
         print("New brush size:", self.radius)
 
+# class Vertex(QtWidgets.QGraphicsRectItem):
+
+#     def __init__(line, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.endline = line
+#         self.startline = 
+
 
 class Polygon:
     def __init__(self, canvas):
         self.canvas = canvas
         self.color = QtGui.QColor(0, 255, 0)
-        self.last_x, self.last_y = None, None
+        self.verticies = []
+        self.line = None
         self.mouse_pressed = False
         self.vertex_side = 6
 
     def mousePressEvent(self, e):
-        """Add new vertex."""
+        """
+
+        Click on empty space -- create new vertex and associate it with line
+        Click on existing vertex -- select vertex to movement
+
+        """
         scene_point = self.canvas.mapToScene(e.pos())
-        print(scene_point)
         self.mouse_pressed = True
 
-        if len(self.canvas.scene.items(scene_point)) == 2:
-            rect = QtWidgets.QGraphicsRectItem(
-                scene_point.x() - self.vertex_side // 2,
-                scene_point.y() - self.vertex_side // 2,
-                self.vertex_side,
-                self.vertex_side,
-                self.canvas.scene.background_item)
-            rect.setBrush(QtGui.QBrush(self.color))
-            # make verticies support iteractive movement
-            rect.setAcceptHoverEvents(True)
-            rect.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsMovable)
+        collidingItems = self.canvas.scene.items(scene_point)
+        collidingVertecies = [
+            item
+            for item in collidingItems
+            if isinstance(item, QtWidgets.QGraphicsRectItem)
+        ]
+
+        if collidingVertecies:
+            init_vertex = self.verticies[0]
+            if init_vertex in collidingItems:
+                # QGraphicsPolygonItem
+                self.drawPolygon()
+            return
+
+        vertex = QtWidgets.QGraphicsRectItem(
+            QtCore.QRectF(0, 0, self.vertex_side, self.vertex_side),
+            parent=self.canvas.scene.background_item)
+        vertex.setPos(
+            scene_point.x() - self.vertex_side // 2,
+            scene_point.y() - self.vertex_side // 2)
+        vertex.setBrush(QtGui.QBrush(self.color))
+        # make verticies support iteractive movement
+        vertex.setAcceptHoverEvents(True)
+        movable_flag = QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsMovable
+        vertex.setFlag(movable_flag)
+        # print(vertex.scenePos())
+        # print(vertex.scenePos())
+        self.verticies.append(vertex)
+
+        self.line = QtWidgets.QGraphicsLineItem(
+            0, 0, 1, 1,
+            parent=self.canvas.scene.background_item)
+        self.line.setPos(scene_point)
+        self.line.setPen(QtGui.QPen(self.color))
 
     def mouseMoveEvent(self, e):
         """Draw a line that connect previous vertex and current mouse pos."""
+        scene_point = self.canvas.mapToScene(e.pos())
+        if self.line:
+            line_pos = self.line.scenePos()
+            mouse = scene_point - line_pos
+            self.line.setLine(0, 0, mouse.x(), mouse.y())
+            # prev_pos = self.verticies[-1].scenePos()
+            # curr_pos = self.canvas.mapToScene(e.pos())
+            # print(prev_pos, curr_pos)
 
     def mouseReleaseEvent(self, e):
-        self.mouse_pressed = False
+        # scene_point = self.canvas.mapToScene(e.pos())
+        # QtCore.QLineF(scene_point, scene_point + QtCore.QPointF(1., 1.)),
         pass
 
     def keyPressEvent(self, e):
@@ -161,3 +205,17 @@ class Polygon:
 
     def cursor(self):
         return Qt.CrossCursor
+
+    def drawPolygon(self):
+        vx_center = QtCore.QPointF(
+            self.vertex_side // 2.,
+            self.vertex_side // 2.)
+        points = (vertex.scenePos() + vx_center for vertex in self.verticies)
+        polygon = QtWidgets.QGraphicsPolygonItem(
+            QtGui.QPolygonF(points),
+            self.canvas.scene.background_item)
+        polygon.setBrush(self.color)
+        for vertex in self.verticies:
+            self.canvas.scene.removeItem(vertex)
+        self.verticies.clear()
+        self.line = None
