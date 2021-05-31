@@ -5,13 +5,14 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 # from .CylinderItem import CylinderItem
 from .Scene import Scene
 from .UndoRedo import UndoRedo
-from .Tools import Brush
+from .Tools import Brush, Polygon
 
 
 class Canvas(QtWidgets.QGraphicsView):
     """A class capable of user interaction with scene.
 
     Inherits QtWidgets.QGraphicsView, so it can be placed in layout.
+    Store scene, undo_redo module and available tools.
     """
 
     def __init__(self, scene: Scene, undo_redo: UndoRedo):
@@ -23,23 +24,19 @@ class Canvas(QtWidgets.QGraphicsView):
         super().__init__(scene)
         self.scene = scene
         self.undo_redo = undo_redo
-        self.tool = Brush(self)
+        # self.tool = Brush(self)
+        self.tool = Polygon(self)
+        self.setCursor(self.tool.cursor())
 
         self.zoom = 1.
         self.zoom_factor = 1.04
 
-    def changeTool(self, buttons):
-        sender = self.sender()
-        prev_button = buttons[sender == buttons[0]]
-        prev_button.setChecked(False)
-
-    def changeBrushColor(self, color: str):
-        self.tool.color = QtGui.QColor(color)
-
     def mouseMoveEvent(self, e):
+        super().mouseMoveEvent(e)
         self.tool.mouseMoveEvent(e)
 
     def mousePressEvent(self, e):
+        super().mousePressEvent(e)
         self.tool.mousePressEvent(e)
 
     def mouseReleaseEvent(self, e):
@@ -47,6 +44,7 @@ class Canvas(QtWidgets.QGraphicsView):
 
         :param e: event object
         """
+        super().mouseReleaseEvent(e)
         self.tool.mouseReleaseEvent(e)
 
     def keyPressEvent(self, e):
@@ -54,7 +52,16 @@ class Canvas(QtWidgets.QGraphicsView):
 
         :param e: event object
         """
+        super().keyPressEvent(e)
         self.tool.keyPressEvent(e)
+
+    def changeTool(self, buttons):
+        sender = self.sender()
+        prev_button = buttons[sender == buttons[0]]
+        prev_button.setChecked(False)
+
+    def changeToolColor(self, color: str):
+        self.tool.color = QtGui.QColor(color)
 
     def _zoom(self, angle_delta: QtCore.QPointF):
         # set new anchor

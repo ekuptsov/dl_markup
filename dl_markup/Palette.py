@@ -43,12 +43,12 @@ class Palette(QWidget):
         return buttons
 
     def bindButtons(self, canvas: Canvas):
-        color_change = canvas.changeBrushColor
+        color_change = canvas.changeToolColor
         for bt, color in zip(self.buttons, self.colors_hex):
             bt.setCheckable(True)
             bt.clicked.connect(self.changePressedButton)
             bt.clicked.connect(partial(color_change, f'{color}'))
-            if color == '#00FF00':  # green default color
+            if color == '#00FF00':  # green is default color
                 bt.setChecked(True)
                 self.pressedButton = bt
 

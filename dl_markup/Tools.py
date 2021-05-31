@@ -33,8 +33,8 @@ class Brush:
 
     def _CircleCursor(self):
         """Draw a circle cursor of the same size as brush."""
-        size = 128
-        pixmap = QPixmap(size, size)
+        pixmap_size = 128
+        pixmap = QPixmap(pixmap_size, pixmap_size)
         pixmap.fill(Qt.GlobalColor.transparent)
 
         # draw circle on pixmap
@@ -44,8 +44,8 @@ class Brush:
             diameter = self.radius * self.canvas.zoom * 2
         else:
             diameter = self.radius * 2
-        left = (size - diameter) // 2
-        top = (size - diameter) // 2
+        left = (pixmap_size - diameter) // 2
+        top = (pixmap_size - diameter) // 2
         # draw bbox in (left, top) with size (diameter, diameter)
         painter.drawEllipse(left, top, diameter, diameter)
         painter.end()
@@ -129,12 +129,35 @@ class Polygon:
         self.color = QtGui.QColor(0, 255, 0)
         self.last_x, self.last_y = None, None
         self.mouse_pressed = False
+        self.vertex_side = 6
 
     def mousePressEvent(self, e):
         """Add new vertex."""
+        scene_point = self.canvas.mapToScene(e.pos())
+        print(scene_point)
+        self.mouse_pressed = True
+
+        if len(self.canvas.scene.items(scene_point)) == 2:
+            rect = QtWidgets.QGraphicsRectItem(
+                scene_point.x() - self.vertex_side // 2,
+                scene_point.y() - self.vertex_side // 2,
+                self.vertex_side,
+                self.vertex_side,
+                self.canvas.scene.background_item)
+            rect.setBrush(QtGui.QBrush(self.color))
+            # make verticies support iteractive movement
+            rect.setAcceptHoverEvents(True)
+            rect.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsMovable)
 
     def mouseMoveEvent(self, e):
         """Draw a line that connect previous vertex and current mouse pos."""
 
-    def cursor():
+    def mouseReleaseEvent(self, e):
+        self.mouse_pressed = False
+        pass
+
+    def keyPressEvent(self, e):
+        pass
+
+    def cursor(self):
         return Qt.CrossCursor
