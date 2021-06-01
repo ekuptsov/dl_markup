@@ -24,8 +24,9 @@ class Canvas(QtWidgets.QGraphicsView):
         super().__init__(scene)
         self.scene = scene
         self.undo_redo = undo_redo
-        # self.tool = Brush(self)
-        self.tool = Polygon(self)
+        # self.brush = Brush(self)
+        # self.polygon = Polygon(self)
+        self.tool = Brush(self)
         self.setCursor(self.tool.cursor())
 
         self.zoom = 1.
@@ -57,6 +58,15 @@ class Canvas(QtWidgets.QGraphicsView):
 
     def changeTool(self, buttons):
         sender = self.sender()
+        tool_color = self.tool.color
+        if sender.text() == 'Brush':
+            if isinstance(self.tool, Polygon):
+                self.tool.clear()
+            self.tool = Brush(self, tool_color)
+            self.setCursor(self.tool.cursor())
+        elif sender.text() == 'Polygon':
+            self.tool = Polygon(self, tool_color)
+            self.setCursor(self.tool.cursor())
         prev_button = buttons[sender == buttons[0]]
         prev_button.setChecked(False)
 
