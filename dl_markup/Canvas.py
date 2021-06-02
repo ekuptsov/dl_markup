@@ -2,17 +2,17 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 # from PyQt5.QtCore import Qt
 # from PyQt5.QtGui import QCursor, QPixmap, QPainter
 
-# from .CylinderItem import CylinderItem
 from .Scene import Scene
 from .UndoRedo import UndoRedo
-from .Tools import Brush, Polygon
+from .BrushTool import Brush
+from .PolygonTool import Polygon
 
 
 class Canvas(QtWidgets.QGraphicsView):
     """A class capable of user interaction with scene.
 
     Inherits QtWidgets.QGraphicsView, so it can be placed in layout.
-    Store scene, undo_redo module and available tools.
+    Store scene, undo_redo module and available tool.
     """
 
     def __init__(self, scene: Scene, undo_redo: UndoRedo):
@@ -24,9 +24,7 @@ class Canvas(QtWidgets.QGraphicsView):
         super().__init__(scene)
         self.scene = scene
         self.undo_redo = undo_redo
-        # self.brush = Brush(self)
-        # self.polygon = Polygon(self)
-        self.tool = Brush(self)
+        self.tool = Brush(self, QtGui.QColor(0, 255, 0))
         self.setCursor(self.tool.cursor())
 
         self.zoom = 1.
