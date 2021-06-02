@@ -1,6 +1,6 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPen, QBrush, QColor, GlobalColor, QGradient
+from PyQt5.QtGui import QPen, QBrush, QColor, QGradient
 
 from typing import Union
 
@@ -11,8 +11,8 @@ class VertexItem(QtWidgets.QGraphicsRectItem):
             self,
             incoming_edge,
             side: float,
-            pen: Union[QPen, QColor, GlobalColor, QGradient] = None,
-            brush: Union[QBrush, QColor, GlobalColor, QGradient] = None,
+            pen: Union[QPen, QColor, Qt.GlobalColor, QGradient] = None,
+            brush: Union[QBrush, QColor, Qt.GlobalColor, QGradient] = None,
             parent=None):
         """Represent vertex of PolygonTool."""
         rect = QtCore.QRectF(0, 0, side, side)
@@ -50,7 +50,7 @@ class VertexItem(QtWidgets.QGraphicsRectItem):
 
 class Polygon:
 
-    def __init__(self, canvas, color: Union[QColor, GlobalColor]):
+    def __init__(self, canvas, color: Union[QColor, Qt.GlobalColor]):
         self.canvas = canvas
         self.color = color
         self.vertex_side = 6.

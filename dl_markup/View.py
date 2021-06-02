@@ -43,7 +43,7 @@ class View(QMainWindow):
         mainLayout.addLayout(input_bar)
 
         output_bar = QHBoxLayout()
-        output_bar.addWidget(QLabel("Output directory"))
+        output_bar.addWidget(QLabel("Saved directory"))
         output_bar.addWidget(model.outputDirectory)
         change_output_bt = QPushButton("Change")
         change_output_bt.clicked.connect(model.selectOutputDirectory)
