@@ -1,5 +1,11 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QSizePolicy
-from PyQt5.QtWidgets import QGridLayout, QPushButton, QVBoxLayout
+from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QSizePolicy
+from PyQt5.QtWidgets import QGridLayout
+from PyQt5.QtWidgets import QPushButton
+from PyQt5.QtWidgets import QVBoxLayout
+from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtCore import Qt
 
 import math
 from functools import partial
@@ -22,7 +28,10 @@ class Palette(QWidget):
 
         super().__init__(parent)
         layout = QVBoxLayout()
-        layout.addWidget(QLabel('Color palette'))
+        title = QLabel(
+            QCoreApplication.translate('Palette', 'Color palette'))
+        title.setAlignment(Qt.AlignHCenter)
+        layout.addWidget(title)
         grid = QGridLayout()
         for idx, item in enumerate(self.buttons):
             i, j = idx // self.columns, idx % self.columns
@@ -48,7 +57,8 @@ class Palette(QWidget):
             bt.setCheckable(True)
             bt.clicked.connect(self.changePressedButton)
             bt.clicked.connect(partial(color_change, f'{color}'))
-            if color == '#00FF00':  # green is default color
+            # green is default color
+            if color == '#00FF00':
                 bt.setChecked(True)
                 self.pressedButton = bt
 

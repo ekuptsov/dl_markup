@@ -27,87 +27,100 @@ class View(QMainWindow):
         """
         super().__init__()
         self.setWindowTitle("DL Markup")
+        self._createToolbar(model, canvas)
 
         mainLayout = QVBoxLayout()
+
         centralWidget = QWidget(self)
         self.setCentralWidget(centralWidget)
         centralWidget.setLayout(mainLayout)
 
-        input_bar = QHBoxLayout()
-        input_bar.addWidget(QLabel("Input directory"))
-        model.inputDirectory.editingFinished.connect(model.updateFileList)
-        input_bar.addWidget(model.inputDirectory)
-        change_input_bt = QPushButton("Change")
-        change_input_bt.clicked.connect(model.selectInputDirectory)
-        input_bar.addWidget(change_input_bt)
-        mainLayout.addLayout(input_bar)
-
-        output_bar = QHBoxLayout()
-        output_bar.addWidget(QLabel("Saved directory"))
-        output_bar.addWidget(model.outputDirectory)
-        change_output_bt = QPushButton("Change")
-        change_output_bt.clicked.connect(model.selectOutputDirectory)
-        output_bar.addWidget(change_output_bt)
-        mainLayout.addLayout(output_bar)
+        inputBar, outputBar = self._createIOBar(model)
+        mainLayout.addLayout(inputBar)
+        mainLayout.addLayout(outputBar)
 
         layout = QHBoxLayout()
         mainLayout.addLayout(layout)
 
+        # display list of images in input dir
         fileList = QListView()
         fileList.setModel(model.listModel)
-        fileList.clicked.connect(partial(model.open, fileList.selectedIndexes))
+        fileList.clicked.connect(
+            partial(model.open, fileList.selectedIndexes))
         layout.addWidget(fileList)
 
+        # painting area
         layout.addWidget(canvas)
 
-        self._createToolbar(model, canvas)
+        toolLayout = self._createToolLayout(canvas)
+        layout.addLayout(toolLayout)
 
-        right_layout = QVBoxLayout()
-        right_layout.addStretch(1)
-        mode = self._createModeButtons(canvas)
-        right_layout.addLayout(mode)
-        palette = Palette()
-        palette.bindButtons(canvas)
-        right_layout.addWidget(palette)
-        layout.addLayout(right_layout)
+    def _createToolLayout(self, canvas: Canvas):
+        """Area lays to the right of canvas.
 
-    def _createModeButtons(self, canvas: Canvas):
-        mode = QVBoxLayout()
-        title = QLabel('Markup mode')
+        Store markup tools and color palette.
+        """
+        toolLayout = QVBoxLayout()
+        toolLayout.addStretch(1)
+
+        toolBox = QVBoxLayout()
+        title = QLabel(
+            QCoreApplication.translate('View', 'Markup tool'))
         title.setAlignment(Qt.AlignHCenter)
-        mode.addWidget(title)
-        bt_layout = QHBoxLayout()
-        brush = QPushButton("Brush")
-        polygon = QPushButton("Polygon")
+        toolBox.addWidget(title)
+        # user switches between tools
+        btLayout = QHBoxLayout()
+        brush = QPushButton(
+            QCoreApplication.translate('View', 'Brush'))
+        polygon = QPushButton(
+            QCoreApplication.translate('View', 'Polygon'))
         brush.setCheckable(True)
         polygon.setCheckable(True)
+        # brush pressed by default
         brush.setChecked(True)
+        # at each moment only one button is pressed
         buttons = [brush, polygon]
         slot = partial(canvas.changeTool, buttons)
         brush.clicked.connect(slot)
         brush.clicked.emit()
         polygon.clicked.connect(slot)
-        bt_layout.addWidget(brush)
-        bt_layout.addWidget(polygon)
-        mode.addLayout(bt_layout)
-        return mode
+        btLayout.addWidget(brush)
+        btLayout.addWidget(polygon)
+        toolBox.addLayout(btLayout)
+        toolLayout.addLayout(toolBox)
+        # user choose tool color by pressing button on palette
+        palette = Palette()
+        palette.bindButtons(canvas)
+        toolLayout.addWidget(palette)
+        return toolLayout
+
+    def _createIOBar(self, model: Model):
+        inputBar = QHBoxLayout()
+        inputTitle = QLabel(
+            QCoreApplication.translate('View', 'Input directory'))
+        inputBar.addWidget(inputTitle)
+        model.inputDirectory.editingFinished.connect(model.updateFileList)
+        inputBar.addWidget(model.inputDirectory)
+        changeInputDir = QPushButton(
+            QCoreApplication.translate('View', 'Change'))
+        changeInputDir.clicked.connect(model.selectInputDirectory)
+        inputBar.addWidget(changeInputDir)
+
+        outputBar = QHBoxLayout()
+        outputTitle = QLabel(
+            QCoreApplication.translate('View', 'Output directory'))
+        outputBar.addWidget(outputTitle)
+        outputBar.addWidget(model.outputDirectory)
+        changeOutputDir = QPushButton(
+            QCoreApplication.translate('View', 'Change'))
+        changeOutputDir.clicked.connect(model.selectOutputDirectory)
+        outputBar.addWidget(changeOutputDir)
+        return inputBar, outputBar
 
     def _createToolbar(self, model: Model, canvas: Canvas):
         """Create toolbar with control buttons."""
         tools = QToolBar()
         self.addToolBar(tools)
-        # tools.addAction(
-        #     QCoreApplication.translate('View', 'Select input directory'),
-        #     model.selectInputDirectory
-        # )
-        # tools.addAction(
-        #     QCoreApplication.translate('View', 'Select output directory'),
-        #     model.selectOutputDirectory
-        # )
-        # tools.addAction(
-        #     QCoreApplication.translate('View', 'Open'),
-        #     partial(model.open, self.fileList.selectedIndexes)
-        # )
         tools.addAction(
             QCoreApplication.translate('View', 'Save'),
             model.save
