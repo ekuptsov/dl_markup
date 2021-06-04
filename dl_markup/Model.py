@@ -3,9 +3,9 @@ from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtCore import QModelIndex
 
-
 import os
 import typing
+import re
 
 from .ListModel import ListModel
 from .Canvas import Canvas
@@ -14,11 +14,14 @@ from .Canvas import Canvas
 class Model:
     """Store application model according to MVC pattern."""
 
-    # def __init__(self, canvas: Canvas, input_dir: str, output_dir: str):
+    IMAGES_RE = re.compile(r'\w+.(?:jpg|jpeg|png|bmp)')
+
     def __init__(self, canvas: Canvas, input_dir: str, output_dir: str):
         """Initialize all data objects.
 
         :param canvas: Canvas object for drawing
+        :param input_dir: Directory of images for markup
+        :param output_dir: Directory of saved image segmentation mask
         """
         self.canvas = canvas
         self.saved_items = self.canvas.scene.items()
@@ -46,6 +49,7 @@ class Model:
         """Load selected image to canvas.
 
         If image has already opened, nothing is changed.
+        If image have unsaved changes, MessageBox is poped up.
         :param get_indexes: function, which produces indexes of selected items
         """
         self.have_unsaved_changes()
@@ -63,6 +67,10 @@ class Model:
                 self.saved_items = self.canvas.scene.items()
 
     def have_unsaved_changes(self):
+        """Check if current items on canvas are the same as saved before.
+
+        Otherwise pop up a MessageBox box with suggestion to save image.
+        """
         items = self.canvas.scene.items()
         if self.saved_items != items:
             msg = QMessageBox()
@@ -93,6 +101,7 @@ class Model:
         text = self.inputDirectory.text()
         if not text:
             return
-        files = os.listdir(text)
+        files = [file for file in os.listdir(text)
+                 if re.fullmatch(self.IMAGES_RE, file)]
         print("Updating file list:", files)
         self.listModel.setItems(files)

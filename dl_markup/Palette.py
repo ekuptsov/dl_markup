@@ -14,13 +14,23 @@ from .Canvas import Canvas
 
 
 class Palette(QWidget):
+    """Color palette.
 
+    Hold buttons with available colors for tool.
+    Developoed as single Widget without Model-View decomposition.
+    """
     colors_hex = ['#00FF00', '#FFFFFF', '#FF0000', '#0000FF',
                   '#FFFF00', '#00FFFF', '#FF00FF', '#800000',
                   '#808000', '#008000', '#800080', '#000080']
     size = 100, 50
 
-    def __init__(self, itemsInRow=4, parent=None):
+    def __init__(self, itemsInRow: int = 4, parent: QWidget = None):
+        """Inittialize Palette.
+
+        Palette fit buttons in grid.
+        :param itemsInRow: number of buttons in each row
+        :param parent: parent layout object
+        """
         self.rows = math.ceil(len(self.colors_hex) // itemsInRow) + 1
         self.columns = itemsInRow
         self.pressedButton = None
@@ -40,6 +50,7 @@ class Palette(QWidget):
         self.setLayout(layout)
 
     def createButtons(self):
+        """Create buttons with right size (palette size is fixed)."""
         w, h = self.size
         bsize = w // self.columns, h // self.rows
         buttons = []
@@ -52,6 +63,7 @@ class Palette(QWidget):
         return buttons
 
     def bindButtons(self, canvas: Canvas):
+        """Connect button color with canvas."""
         color_change = canvas.changeToolColor
         for bt, color in zip(self.buttons, self.colors_hex):
             bt.setCheckable(True)
@@ -63,6 +75,7 @@ class Palette(QWidget):
                 self.pressedButton = bt
 
     def changePressedButton(self):
+        """Each time only one button is pressed."""
         sender = self.sender()
         if self.pressedButton is not None:
             self.pressedButton.setChecked(False)

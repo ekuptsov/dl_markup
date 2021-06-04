@@ -101,8 +101,16 @@ class CylinderItem(QtWidgets.QGraphicsItem):
 
 
 class Brush:
+    """Round markup tool which cursor size fits the width of drawing line.
 
-    def __init__(self, canvas, color=QtGui.QColor(0, 255, 0)):
+    Draw CylinderItems when user hold and move the mouse on canvas.
+    """
+    def __init__(self, canvas: "Canvas", color: QtGui.QColor):
+        """Initialize brush.
+
+        :param canvas: сanvas object for drawing
+        :param color: color of brush
+        """
         self.canvas = canvas
         self.color = color
         self.last_x, self.last_y = None, None
@@ -115,8 +123,8 @@ class Brush:
 
     @radius.setter
     def radius(self, value):
+        """Control max brush size and update cursor on canvas."""
         self._radius = min(value, 63)
-        # redraw cursor
         self.canvas.setCursor(self.cursor())
 
     @radius.deleter
@@ -124,6 +132,11 @@ class Brush:
         del self._radius
 
     def cursor(self):
+        """Each call redraw cursor.
+
+        Every tool has unique cursor, which is updated (redrawn)
+        after zooming, size changing or switching between tools.
+        """
         return self._CircleCursor()
 
     def _CircleCursor(self):
@@ -132,7 +145,7 @@ class Brush:
         pixmap = QPixmap(pixmap_size, pixmap_size)
         pixmap.fill(Qt.GlobalColor.transparent)
 
-        # draw circle on pixmap
+        # draw circle on pixmap among .begin() and .end() calls
         painter = QPainter()
         painter.begin(pixmap)
         if hasattr(self.canvas, 'zoom'):
@@ -187,9 +200,6 @@ class Brush:
         self.last_y = scene_point.y()
 
     def mousePressEvent(self, e):
-        # TODO: eraser
-        # if e.button() == Qt.RightButton:
-            # self.color = QtGui.QColor(0, 0, 0)
         scene_point = self.canvas.mapToScene(e.pos())
         self.last_x = scene_point.x()
         self.last_y = scene_point.y()

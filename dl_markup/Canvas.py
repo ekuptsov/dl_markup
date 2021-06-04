@@ -1,6 +1,8 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
-# from PyQt5.QtCore import Qt
-# from PyQt5.QtGui import QCursor, QPixmap, QPainter
+from PyQt5.QtWidgets import QAbstractButton
+from PyQt5.QtCore import QCoreApplication
+
+from typing import List
 
 from .Scene import Scene
 from .UndoRedo import UndoRedo
@@ -24,6 +26,7 @@ class Canvas(QtWidgets.QGraphicsView):
         super().__init__(scene)
         self.scene = scene
         self.undo_redo = undo_redo
+        # green is default color
         self.tool = Brush(self, QtGui.QColor(0, 255, 0))
         self.setCursor(self.tool.cursor())
 
@@ -31,15 +34,23 @@ class Canvas(QtWidgets.QGraphicsView):
         self.zoom_factor = 1.04
 
     def mouseMoveEvent(self, e):
+        """Propagate event to sons and call tool handler.
+
+        :param e: event object
+        """
         super().mouseMoveEvent(e)
         self.tool.mouseMoveEvent(e)
 
     def mousePressEvent(self, e):
+        """Propagate event to sons and call tool handler.
+
+        :param e: event object
+        """
         super().mousePressEvent(e)
         self.tool.mousePressEvent(e)
 
     def mouseReleaseEvent(self, e):
-        """Clear mouse position info.
+        """Propagate event to sons and call tool handler.
 
         :param e: event object
         """
@@ -47,28 +58,46 @@ class Canvas(QtWidgets.QGraphicsView):
         self.tool.mouseReleaseEvent(e)
 
     def keyPressEvent(self, e):
-        """Change brush size by pressing '+' and '-' buttons.
+        """Change tool size by pressing '+' and '-' buttons.
 
+        Implemented only for brush tool.
         :param e: event object
         """
         super().keyPressEvent(e)
         self.tool.keyPressEvent(e)
 
-    def changeTool(self, buttons):
+    def changeTool(self, buttons: List[QAbstractButton]):
+        """Switch between markup tools.
+
+        Press sender button and rise another.
+        Only support Brush and Polygon.
+        :param buttons: list of Brush and Polygon buttons
+        """
         sender = self.sender()
         tool_color = self.tool.color
-        if sender.text() == 'Brush':
+        brush_text = QCoreApplication.translate('View', 'Brush')
+        polygon_text = QCoreApplication.translate('View', 'Polygon')
+        # switch tool by button text
+        if sender.text() == brush_text:
             if isinstance(self.tool, Polygon):
+                # clear canvas from intermidiate verticies and edges
                 self.tool.clear()
             self.tool = Brush(self, tool_color)
-            self.setCursor(self.tool.cursor())
-        elif sender.text() == 'Polygon':
+        elif sender.text() == polygon_text:
             self.tool = Polygon(self, tool_color)
-            self.setCursor(self.tool.cursor())
+        assert len(buttons) == 2, "Support exactly 2 tools"
+        # small hint to choose another button
         prev_button = buttons[sender == buttons[0]]
+        # and rise it
         prev_button.setChecked(False)
 
     def changeToolColor(self, color: str):
+        """Change tool color by their string description.
+
+        Call QColor.colorNames() staticmethod to figure out
+        valid strings that QColor knows about.
+        :param color: new color of tool
+        """
         self.tool.color = QtGui.QColor(color)
 
     def _zoom(self, angle_delta: QtCore.QPointF):
@@ -83,7 +112,7 @@ class Canvas(QtWidgets.QGraphicsView):
             zoom_factor = 1 / self.zoom_factor
         self.zoom *= zoom_factor
         self.scale(zoom_factor, zoom_factor)
-        # dont forget about cursor
+        # dont forget update cursor
         self.setCursor(self.tool.cursor())
         # reset old anchor
         self.setTransformationAnchor(old_anchor)

@@ -56,9 +56,9 @@ class View(QMainWindow):
         layout.addLayout(toolLayout)
 
     def _createToolLayout(self, canvas: Canvas):
-        """Area lays to the right of canvas.
+        """Store markup tools and color palette.
 
-        Store markup tools and color palette.
+        Area lies to the right of canvas.
         """
         toolLayout = QVBoxLayout()
         toolLayout.addStretch(1)
@@ -95,6 +95,10 @@ class View(QMainWindow):
         return toolLayout
 
     def _createIOBar(self, model: Model):
+        """Create bar that display and change input and output directories.
+
+        It lie above the canvas.
+        """
         inputBar = QHBoxLayout()
         inputTitle = QLabel(
             QCoreApplication.translate('View', 'Input directory'))

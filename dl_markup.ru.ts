@@ -26,37 +26,37 @@
         <translation type="obsolete">Открыть</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="124"/>
+        <location filename="dl_markup/View.py" line="128"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="128"/>
+        <location filename="dl_markup/View.py" line="132"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="132"/>
+        <location filename="dl_markup/View.py" line="136"/>
         <source>Redo</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="136"/>
+        <location filename="dl_markup/View.py" line="140"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="99"/>
+        <location filename="dl_markup/View.py" line="103"/>
         <source>Input directory</source>
         <translation>Открыть из</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="114"/>
+        <location filename="dl_markup/View.py" line="118"/>
         <source>Change</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="110"/>
+        <location filename="dl_markup/View.py" line="114"/>
         <source>Output directory</source>
         <translation>Сохранить в</translation>
     </message>

@@ -6,15 +6,26 @@ from typing import Union
 
 
 class VertexItem(QtWidgets.QGraphicsRectItem):
+    """Represent future coordinates of vertecies in PolygonItem.
 
+    Support interactive moving (hold mouse),
+    incident egdes redrawing and outgoing egde mouse following.
+    """
     def __init__(
             self,
-            incoming_edge,
+            incoming_edge: QtWidgets.QGraphicsLineItem,
             side: float,
             pen: Union[QPen, QColor, Qt.GlobalColor, QGradient] = None,
             brush: Union[QBrush, QColor, Qt.GlobalColor, QGradient] = None,
-            parent=None):
-        """Represent vertex of PolygonTool."""
+            parent: QtWidgets.QGraphicsRectItem = None):
+        """Represent vertex of Polygon tool.
+
+        :param incoming_egde:
+        :param side: side lenght of drawing rectangle representing the vertex
+        :param pen: pen that used in RectItem and LineItem
+        :param brush: brush that used in RectItem
+        :param parent: parent layout object
+        """
         rect = QtCore.QRectF(0, 0, side, side)
         super().__init__(rect, parent)
         self.incoming_edge = incoming_edge
@@ -43,24 +54,38 @@ class VertexItem(QtWidgets.QGraphicsRectItem):
             mouse = new_vertex_center - line_pos
             self.incoming_edge.setLine(0, 0, mouse.x(), mouse.y())
 
+        # outgoing edge binds to vertex
+        # so it lenght increases by the
+        # opposite of vertex motion vector
         p2 = self.outgoing_edge.line().p2()
         p2 += old_vertex_center - new_vertex_center
         self.outgoing_edge.setLine(0, 0, p2.x(), p2.y())
 
 
 class Polygon:
+    """Tool that draw polygon using VertexItems marked by user.
 
-    def __init__(self, canvas, color: Union[QColor, Qt.GlobalColor]):
+    Hold all marked verticies in list. If user click on first
+    vertex, tool will draw QGraphicsPolygonItem and clear canvas from
+    intermidiate vertecies and lines. User can undo existing
+    QGraphicsPolygonItems.
+    """
+    def __init__(self, canvas: "Canvas", color: Union[QColor, Qt.GlobalColor]):
+        """Initialize Polygon.
+
+        :param canvas: сanvas object for drawing
+        :param color: color of polygon
+        """
         self.canvas = canvas
         self.color = color
         self.vertex_side = 6.
         self.verticies = []
+        self.canvas.setCursor(self.cursor())
 
     def mousePressEvent(self, e):
-        """
-        Click on empty space -- create new vertex and associate it with line
-        Click on existing vertex -- select vertex to movement
+        """Add new VertexItem on canvas.
 
+        If user click on first vertex, tool draw Polygon.
         """
         scene_point = self.canvas.mapToScene(e.pos())
 
@@ -100,21 +125,26 @@ class Polygon:
             tracking_line.setLine(0, 0, mouse.x(), mouse.y())
 
     def mouseReleaseEvent(self, e):
+        """Skip event."""
         pass
 
     def keyPressEvent(self, e):
+        """Skip event."""
         pass
 
     def cursor(self):
+        """CrossCursor increase markup precision."""
         return Qt.CrossCursor
 
     def clear(self):
+        """Accurately free resources and erase intermidiate steps."""
         for vertex in self.verticies:
             # vertex removed with outgoing edge
             self.canvas.scene.removeItem(vertex)
         self.verticies.clear()
 
     def drawPolygon(self):
+        """Draw Polygon based on VerexItems centers."""
         points = QtGui.QPolygonF(
             vertex.scenePos() + vertex.rect().center()
             for vertex in self.verticies)
@@ -123,4 +153,5 @@ class Polygon:
             self.canvas.scene.background_item)
         polygon.setBrush(self.color)
         polygon.setPen(self.color)
+        # undo-redo only polygon, not verticies
         self.canvas.undo_redo.insert_in_undo_redo_add(polygon)
