@@ -128,7 +128,7 @@ class Brush:
     @radius.setter
     def radius(self, value):
         """Control max brush size and update cursor on canvas."""
-        self._radius = min(value, 63)
+        self._radius = max(min(value, 25), 2)
         self.canvas.setCursor(self.cursor())
 
     @radius.deleter
@@ -154,6 +154,8 @@ class Brush:
         painter.begin(pixmap)
         if hasattr(self.canvas, 'zoom'):
             diameter = self.radius * self.canvas.zoom * 2
+            if diameter > pixmap_size:
+                print(f"Max displayed diameter {pixmap_size}")
         else:
             diameter = self.radius * 2
         left = (pixmap_size - diameter) // 2

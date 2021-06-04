@@ -30,7 +30,7 @@ class Canvas(QtWidgets.QGraphicsView):
         self.tool = Brush(self, QtGui.QColor(0, 255, 0))
         self.setCursor(self.tool.cursor())
 
-        self.zoom = 1.
+        self.zoom = 1.  # 0.5 <= zoom <= 2.5
         self.zoom_factor = 1.04
 
     def mouseMoveEvent(self, e):
@@ -110,7 +110,12 @@ class Canvas(QtWidgets.QGraphicsView):
         zoom_factor = self.zoom_factor
         if angle_delta.y() < 0:
             zoom_factor = 1 / self.zoom_factor
-        self.zoom *= zoom_factor
+        new_zoom = self.zoom * zoom_factor
+        # restrict zooming
+        if not (0.5 < new_zoom < 2.5):
+            return
+        self.zoom = new_zoom
+
         self.scale(zoom_factor, zoom_factor)
         # dont forget update cursor
         self.setCursor(self.tool.cursor())
