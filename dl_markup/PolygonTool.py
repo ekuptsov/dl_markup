@@ -4,6 +4,10 @@ from PyQt5.QtGui import QPen, QBrush, QColor, QGradient
 
 from typing import Union
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .Canvas import Canvas
+
 
 class VertexItem(QtWidgets.QGraphicsRectItem):
     """Represent future coordinates of vertecies in PolygonItem.
@@ -70,7 +74,7 @@ class Polygon:
     intermidiate vertecies and lines. User can undo existing
     QGraphicsPolygonItems.
     """
-    def __init__(self, canvas: "Canvas", color: Union[QColor, Qt.GlobalColor]):
+    def __init__(self, canvas: 'Canvas', color: Union[QColor, Qt.GlobalColor]):
         """Initialize Polygon.
 
         :param canvas: сanvas object for drawing

@@ -2,6 +2,10 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor, QPixmap, QPainter
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .Canvas import Canvas
+
 
 class CylinderItem(QtWidgets.QGraphicsItem):
     """Drawing item that represents basic brush movement.
@@ -105,7 +109,7 @@ class Brush:
 
     Draw CylinderItems when user hold and move the mouse on canvas.
     """
-    def __init__(self, canvas: "Canvas", color: QtGui.QColor):
+    def __init__(self, canvas: 'Canvas', color: QtGui.QColor):
         """Initialize brush.
 
         :param canvas: сanvas object for drawing
