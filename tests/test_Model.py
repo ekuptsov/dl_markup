@@ -13,7 +13,7 @@ def test_select_input_directory_1(
     _, scene, undo_redo = scene_with_undo_redo
 
     canvas = Canvas(scene, undo_redo)
-    model = Model(canvas)
+    model = Model(canvas, './', './')
 
     monkeypatch.setattr(
         QFileDialog,
@@ -33,7 +33,10 @@ def test_select_input_directory_2(
     _, scene, undo_redo = scene_with_undo_redo
 
     canvas = Canvas(scene, undo_redo)
-    model = Model(canvas)
+    model = Model(canvas, './', './')
+
+    init_items = model.listModel.items
+    init_text = model.inputDirectory.text()
 
     monkeypatch.setattr(
         QFileDialog,
@@ -42,8 +45,8 @@ def test_select_input_directory_2(
     )
     model.selectInputDirectory()
 
-    assert len(model.listModel.items) == 0
-    assert model.inputDirectory.text() == '.'
+    assert model.listModel.items == init_items
+    assert model.inputDirectory.text() == init_text
 
 
 def test_select_output_directory(
@@ -53,7 +56,7 @@ def test_select_output_directory(
     _, scene, undo_redo = scene_with_undo_redo
 
     canvas = Canvas(scene, undo_redo)
-    model = Model(canvas)
+    model = Model(canvas, './', './')
 
     monkeypatch.setattr(
         QFileDialog,

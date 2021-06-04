@@ -1,15 +1,20 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QAbstractButton
+from PyQt5.QtCore import QCoreApplication
 
-from .CylinderItem import CylinderItem
+from typing import List
+
 from .Scene import Scene
 from .UndoRedo import UndoRedo
+from .BrushTool import Brush
+from .PolygonTool import Polygon
 
 
 class Canvas(QtWidgets.QGraphicsView):
     """A class capable of user interaction with scene.
 
     Inherits QtWidgets.QGraphicsView, so it can be placed in layout.
+    Store scene, undo_redo module and available tool.
     """
 
     def __init__(self, scene: Scene, undo_redo: UndoRedo):
@@ -21,84 +26,79 @@ class Canvas(QtWidgets.QGraphicsView):
         super().__init__(scene)
         self.scene = scene
         self.undo_redo = undo_redo
-        self.color = QtGui.QColor(0, 255, 0)
-        self.brush_size = 20
-        self.last_x, self.last_y = None, None
+        # green is default color
+        self.tool = Brush(self, QtGui.QColor(0, 255, 0))
+        self.setCursor(self.tool.cursor())
+
+        self.zoom = 1.  # 0.5 <= zoom <= 2.5
         self.zoom_factor = 1.04
-        self.mouse_pressed = False
 
     def mouseMoveEvent(self, e):
-        """Draw cylinder between previous and current mouse positions.
+        """Propagate event to sons and call tool handler.
 
         :param e: event object
         """
-        if self.scene.img_item is None:
-            return
-        if not self.mouse_pressed:
-            return
-
-        scene_point = self.mapToScene(e.pos())
-
-        # cursor has moved outside of the scene
-        if scene_point.x() < 0 or \
-                scene_point.y() < 0 or \
-                scene_point.x() > self.scene.width() - 1 or \
-                scene_point.y() > self.scene.height() - 1:
-            self.last_x, self.last_y = None, None
-            return
-
-        if self.last_x is None:  # First event.
-            self.last_x = scene_point.x()
-            self.last_y = scene_point.y()
-            return  # Ignore the first time.
-
-        cylinder = CylinderItem(
-            QtCore.QPointF(self.last_x, self.last_y),
-            QtCore.QPointF(scene_point.x(), scene_point.y()),
-            self.brush_size,
-            pen=QtGui.QPen(self.color),
-            brush=QtGui.QBrush(self.color),
-            parent=self.scene.background_item,
-        )
-        self.undo_redo.insert_in_undo_redo_add(cylinder)
-
-        # Update the origin for next time.
-        self.last_x = scene_point.x()
-        self.last_y = scene_point.y()
+        super().mouseMoveEvent(e)
+        self.tool.mouseMoveEvent(e)
 
     def mousePressEvent(self, e):
-        scene_point = self.mapToScene(e.pos())
-        self.last_x = scene_point.x()
-        self.last_y = scene_point.y()
-        self.mouse_pressed = True
+        """Propagate event to sons and call tool handler.
+
+        :param e: event object
+        """
+        super().mousePressEvent(e)
+        self.tool.mousePressEvent(e)
 
     def mouseReleaseEvent(self, e):
-        """Clear mouse position info.
+        """Propagate event to sons and call tool handler.
 
         :param e: event object
         """
-        self.last_x = None
-        self.last_y = None
-        self.mouse_pressed = False
+        super().mouseReleaseEvent(e)
+        self.tool.mouseReleaseEvent(e)
 
     def keyPressEvent(self, e):
-        """Change brush size by pressing '+' and '-' buttons.
+        """Change tool size by pressing '+' and '-' buttons.
 
+        Implemented only for brush tool.
         :param e: event object
         """
-        if e.key() == Qt.Key_Plus or e.key() == Qt.Key_Equal:
-            self.brush_size = self.brush_size + 1
-        elif e.key() == Qt.Key_Minus:
-            self.brush_size = max(1, self.brush_size - 1)
-        else:
-            return
-        print("New brush size:", self.brush_size)
+        super().keyPressEvent(e)
+        self.tool.keyPressEvent(e)
 
-    def wheelEvent(self, e):
-        if e.modifiers() & QtCore.Qt.ControlModifier:
-            self._zoom(e.angleDelta())
-        else:
-            super().wheelEvent(e)
+    def changeTool(self, buttons: List[QAbstractButton]):
+        """Switch between markup tools.
+
+        Press sender button and rise another.
+        Only support Brush and Polygon.
+        :param buttons: list of Brush and Polygon buttons
+        """
+        sender = self.sender()
+        tool_color = self.tool.color
+        brush_text = QCoreApplication.translate('View', 'Brush')
+        polygon_text = QCoreApplication.translate('View', 'Polygon')
+        # switch tool by button text
+        if sender.text() == brush_text:
+            if isinstance(self.tool, Polygon):
+                # clear canvas from intermidiate verticies and edges
+                self.tool.clear()
+            self.tool = Brush(self, tool_color)
+        elif sender.text() == polygon_text:
+            self.tool = Polygon(self, tool_color)
+        assert len(buttons) == 2, "Support exactly 2 tools"
+        # small hint to choose another button
+        prev_button = buttons[sender == buttons[0]]
+        # and rise it
+        prev_button.setChecked(False)
+
+    def changeToolColor(self, color: str):
+        """Change tool color by their string description.
+
+        Call QColor.colorNames() staticmethod to figure out
+        valid strings that QColor knows about.
+        :param color: new color of tool
+        """
+        self.tool.color = QtGui.QColor(color)
 
     def _zoom(self, angle_delta: QtCore.QPointF):
         # set new anchor
@@ -110,10 +110,23 @@ class Canvas(QtWidgets.QGraphicsView):
         zoom_factor = self.zoom_factor
         if angle_delta.y() < 0:
             zoom_factor = 1 / self.zoom_factor
-        self.scale(zoom_factor, zoom_factor)
+        new_zoom = self.zoom * zoom_factor
+        # restrict zooming
+        if not (0.5 < new_zoom < 2.5):
+            return
+        self.zoom = new_zoom
 
+        self.scale(zoom_factor, zoom_factor)
+        # dont forget update cursor
+        self.setCursor(self.tool.cursor())
         # reset old anchor
         self.setTransformationAnchor(old_anchor)
+
+    def wheelEvent(self, e):
+        if e.modifiers() & QtCore.Qt.ControlModifier:
+            self._zoom(e.angleDelta())
+        else:
+            super().wheelEvent(e)
 
     def clear(self):
         """Clear scene and history."""
