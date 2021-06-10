@@ -47,13 +47,13 @@ class View(QMainWindow):
         fileList.setModel(model.listModel)
         fileList.clicked.connect(
             partial(model.open, fileList.selectedIndexes))
-        layout.addWidget(fileList)
+        layout.addWidget(fileList, 1)
 
         # painting area
-        layout.addWidget(canvas)
+        layout.addWidget(canvas, 3)
 
         toolLayout = self._createToolLayout(canvas)
-        layout.addLayout(toolLayout)
+        layout.addLayout(toolLayout, 1)
 
     def _createToolLayout(self, canvas: Canvas):
         """Store markup tools and color palette.
