@@ -136,6 +136,7 @@ class Canvas(QtWidgets.QGraphicsView):
 
     def clear(self):
         """Clear scene and history."""
+        self.tool.clear()
         self.scene.clear()
         self.undo_redo.clear()
 

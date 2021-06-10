@@ -235,3 +235,7 @@ class Brush:
         else:
             return
         print("New brush size:", self.radius)
+
+    def clear(self):
+        """Accurately free resources."""
+        pass
