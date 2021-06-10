@@ -19,6 +19,7 @@ class Palette(QWidget):
     Hold buttons with available colors for tool.
     Developoed as single Widget without Model-View decomposition.
     """
+
     colors_hex = ['#00FF00', '#FFFFFF', '#FF0000', '#0000FF',
                   '#FFFF00', '#00FFFF', '#FF00FF', '#800000',
                   '#808000', '#008000', '#800080', '#000080']

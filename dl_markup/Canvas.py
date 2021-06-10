@@ -123,6 +123,7 @@ class Canvas(QtWidgets.QGraphicsView):
         self.setTransformationAnchor(old_anchor)
 
     def wheelEvent(self, e):
+        """Call on mouse scroll."""
         if e.modifiers() & QtCore.Qt.ControlModifier:
             self._zoom(e.angleDelta())
         else:

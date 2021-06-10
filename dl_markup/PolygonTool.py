@@ -15,6 +15,7 @@ class VertexItem(QtWidgets.QGraphicsRectItem):
     Support interactive moving (hold mouse),
     incident egdes redrawing and outgoing egde mouse following.
     """
+
     def __init__(
             self,
             incoming_edge: QtWidgets.QGraphicsLineItem,
@@ -74,6 +75,7 @@ class Polygon:
     intermidiate vertecies and lines. User can undo existing
     QGraphicsPolygonItems.
     """
+
     def __init__(self, canvas: 'Canvas', color: Union[QColor, Qt.GlobalColor]):
         """Initialize Polygon.
 
@@ -137,7 +139,7 @@ class Polygon:
         pass
 
     def cursor(self):
-        """CrossCursor increase markup precision."""
+        """Crosscursor increase markup precision."""
         return Qt.CrossCursor
 
     def clear(self):
