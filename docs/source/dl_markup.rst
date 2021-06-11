@@ -1,8 +1,5 @@
-dl\_markup package
+Package modules
 ==================
-
-Submodules
-----------
 
 dl\_markup.Canvas module
 ------------------------
@@ -11,22 +8,34 @@ dl\_markup.Canvas module
    :members:
    :undoc-members:
    :show-inheritance:
+   :special-members: __init__
 
-dl\_markup.CylinderItem module
+dl\_markup.BrushTool module
+---------------------------
+
+.. automodule:: dl_markup.BrushTool
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :special-members: __init__
+
+dl\_markup.PolygonTool module
 ------------------------------
 
-.. automodule:: dl_markup.CylinderItem
+.. automodule:: dl_markup.PolygonTool
    :members:
    :undoc-members:
    :show-inheritance:
+   :special-members: __init__
 
-dl\_markup.DlMarkupApplication module
+dl\_markup.DLMarkupApplication module
 -------------------------------------
 
-.. automodule:: dl_markup.DlMarkupApplication
+.. automodule:: dl_markup.DLMarkupApplication
    :members:
    :undoc-members:
    :show-inheritance:
+   :special-members: __init__
 
 dl\_markup.ListModel module
 ---------------------------
@@ -35,6 +44,7 @@ dl\_markup.ListModel module
    :members:
    :undoc-members:
    :show-inheritance:
+   :special-members: __init__
 
 dl\_markup.Model module
 -----------------------
@@ -43,6 +53,16 @@ dl\_markup.Model module
    :members:
    :undoc-members:
    :show-inheritance:
+   :special-members: __init__
+
+dl\_markup.Palette module
+-------------------------
+
+.. automodule:: dl_markup.Palette
+   :members:
+   :undoc-members: color_hex, size
+   :show-inheritance:
+   :special-members: __init__
 
 dl\_markup.Scene module
 -----------------------
@@ -51,6 +71,7 @@ dl\_markup.Scene module
    :members:
    :undoc-members:
    :show-inheritance:
+   :special-members: __init__
 
 dl\_markup.UndoRedo module
 --------------------------
@@ -59,6 +80,7 @@ dl\_markup.UndoRedo module
    :members:
    :undoc-members:
    :show-inheritance:
+   :special-members: __init__
 
 dl\_markup.View module
 ----------------------
@@ -67,11 +89,4 @@ dl\_markup.View module
    :members:
    :undoc-members:
    :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: dl_markup
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :special-members: __init__

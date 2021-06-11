@@ -7,11 +7,14 @@
 Welcome to dl_markup's documentation!
 =====================================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
 .. mdinclude:: ../README.md
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Modules docs
+
+   source/dl_markup
+
 
 Indices and tables
 ==================
