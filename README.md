@@ -3,20 +3,19 @@
 A tool for images markup for deep learning puproses.
 
 MVP:
-Binary segmentation masks.
+Color segmentation masks.
 
 Interface model:
-1. Button "Images folder" for input folder selection.
-2. Button "Output folder" for output folder selection.
-3. One instrument - brush. Size of brush can be changed by buttons / mouse wheel.
-4. Image is loading on the screen. The brush draws a green semi-transparent mask over the image.
-5. Button "OK" creates the file with a mask in the output directory. File has the same name as original image has.
-6. Button "Next" loads the next image.
-
-Optional features:
-1. "Eraser" instrument.
-2. "Undo" button.
-3. Multi-class labelling.
+1. Line "Input directory" display absolute path to folder with input images. To change it press "Change" button or edit path manually.
+2. Line "Output directory" display absolute path to folder where segmentation mask was saved. To change it press "Change" button or edit path manually.
+3. User able to switch between 2 instruments: brush and polygon.
+    1. Size of brush can be changed by Ctrl+mouse wheel. Size of brush cursor always fits the width of drawing line.
+    2. Polygon item places vertecies on image by mouse clicking. If user press on first-placed vertex, tool draw a polygon with marked verticies. Other verticies can be moved in the markup process by holding mouse button.
+4. User able to choose markup color on color Palette. Application provides 12 different colors.
+5. User press on image name in list on the left and it is loaded on the screen. If canvas have unsaved changes, application suggest save them before switching image.
+6. Button "Save" creates the file with a mask in the output directory. File has the same name as original image has.
+7. Button "Clear" remove mark objects from image.
+8. Buttons "Undo", "Redo" allow user to move back and forth along markup history.
 
 ## Setup development environment
 
