@@ -19,7 +19,7 @@ class LocalizationCommand(distutils.cmd.Command):
 
     def run(self):
         """Run command."""
-        subprocess.run(['sh', 'scripts/localization.sh'])
+        subprocess.run(['sh', './scripts/localization.sh'])
 
 
 class CheckCommand(distutils.cmd.Command):
@@ -38,7 +38,7 @@ class CheckCommand(distutils.cmd.Command):
 
     def run(self):
         """Run command."""
-        subprocess.run(['sh', 'scripts/check.sh'])
+        subprocess.run(['sh', './scripts/check.sh'])
 
 
 setup(
@@ -54,5 +54,8 @@ setup(
     cmdclass={
         'localization': LocalizationCommand,
         'check': CheckCommand
-    }
+    },
+    package_data={
+        "dl_markup": ["*/*.qm"],
+    },
 )
