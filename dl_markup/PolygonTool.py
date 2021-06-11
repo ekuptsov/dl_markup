@@ -15,6 +15,7 @@ class VertexItem(QtWidgets.QGraphicsRectItem):
     Support interactive moving (hold mouse),
     incident egdes redrawing and outgoing egde mouse following.
     """
+
     def __init__(
             self,
             incoming_edge: QtWidgets.QGraphicsLineItem,
@@ -31,6 +32,8 @@ class VertexItem(QtWidgets.QGraphicsRectItem):
         :param parent: parent layout object
         """
         rect = QtCore.QRectF(0, 0, side, side)
+        self.side = side
+        self.halfSide = side / 2
         super().__init__(rect, parent)
         self.incoming_edge = incoming_edge
 
@@ -45,6 +48,27 @@ class VertexItem(QtWidgets.QGraphicsRectItem):
         self.setAcceptHoverEvents(True)
         movable_flag = QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsMovable
         self.setFlag(movable_flag)
+        self.leaved = False
+
+    def hoverEnterEvent(self, e):
+        """Change vertex size when hovering over it."""
+        if not self.leaved:
+            return
+        rect = QtCore.QRectF(0, 0, 2 * self.side, 2 * self.side)
+        self.setRect(rect)
+        self.moveBy(-self.halfSide, -self.halfSide)
+        self.outgoing_edge.moveBy(self.halfSide, self.halfSide)
+
+    def hoverLeaveEvent(self, e):
+        """Change vertex size back."""
+        if not self.leaved:
+            self.leaved = True
+            return
+        self.moveBy(self.halfSide, self.halfSide)
+        self.outgoing_edge.moveBy(-self.halfSide, -self.halfSide)
+        rect = QtCore.QRectF(0, 0, self.side, self.side)
+        self.setRect(rect)
+        self.leaved = True
 
     def mouseMoveEvent(self, e):
         """When vertex is moved, incident edges are changed too."""
@@ -74,6 +98,7 @@ class Polygon:
     intermidiate vertecies and lines. User can undo existing
     QGraphicsPolygonItems.
     """
+
     def __init__(self, canvas: 'Canvas', color: Union[QColor, Qt.GlobalColor]):
         """Initialize Polygon.
 
@@ -137,7 +162,7 @@ class Polygon:
         pass
 
     def cursor(self):
-        """CrossCursor increase markup precision."""
+        """Crosscursor increase markup precision."""
         return Qt.CrossCursor
 
     def clear(self):
