@@ -21,13 +21,14 @@ Interface model:
 
 1. Download, install and setup [Git LFS](https://git-lfs.github.com/)
 
-2. Setup virtualenv
+2. Create and setup virtualenv
 ```
-./scripts/setup/dev.sh
-source venv/bin/activate
+python3 -m venv /path/to/new/virtual/environment
+source <venv>/bin/activate
+pip install -r requirements.dev.txt
 ```
 
-3. install package
+3. Install package
 ```
 pip install -e .
 ```
@@ -36,14 +37,34 @@ Now you can run app with
 dl_markup
 ```
 
-## Update localization
-
-1. Go to the root
-
-2. `pylupdate5 dl_markup/*.py -ts dl_markup.ru.ts`
-
-3. `lrelease dl_markup.ru.ts`
-
 ## Run tests
 
-`pytest .`
+```
+pytest --cov=dl_markup
+```
+
+## Check flake8 and pydocstyle
+
+```
+flake8 dl_markup
+pydocstyle dl_markup
+```
+
+## Update localization
+```
+pylupdate5 dl_markup/*.py -ts dl_markup.ru.ts
+lrelease dl_markup.ru.ts
+```
+
+## Build a wheel
+
+```
+python -m build .
+```
+
+This command generate two files in the `dist` directory:
+```
+dist\
+    dl_markup-0.0.1-py3-none-any.whl
+    dl_markup-0.0.1.tar.gz
+```
