@@ -51,6 +51,7 @@ class VertexItem(QtWidgets.QGraphicsRectItem):
         self.leaved = False
 
     def hoverEnterEvent(self, e):
+        """Change vertex size when hovering over it."""
         if not self.leaved:
             return
         rect = QtCore.QRectF(0, 0, 2 * self.side, 2 * self.side)
@@ -59,6 +60,7 @@ class VertexItem(QtWidgets.QGraphicsRectItem):
         self.outgoing_edge.moveBy(self.halfSide, self.halfSide)
 
     def hoverLeaveEvent(self, e):
+        """Change vertex size back."""
         if not self.leaved:
             self.leaved = True
             return
