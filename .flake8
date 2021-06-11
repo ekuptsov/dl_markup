@@ -2,4 +2,5 @@
 max-line-length = 119
 exclude = .git,venv
 per-file-ignores = tests/test_UndoRedo.py:F401,F811,
-    tests/test_Model.py:F401,F811
+    tests/test_Model.py:F401,F811,
+    dl_markup/Model.py:W605

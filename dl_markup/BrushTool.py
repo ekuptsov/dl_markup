@@ -26,7 +26,7 @@ class CylinderItem(QtWidgets.QGraphicsItem):
 
         :param begin: first point
         :param end: second point
-        :param raduis: size of circles
+        :param radius: size of circles
         :param pen: QPen object with color information
         :param brush: QBrush object with color information
         """

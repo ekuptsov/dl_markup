@@ -15,6 +15,7 @@ class Model:
     """Store application model according to MVC pattern."""
 
     IMAGES_RE = re.compile(r'\w+.(?:jpg|jpeg|png|bmp)')
+    """Regex :regex:`\w+.(?:jpg|jpeg|png|bmp)` select image filenames."""
 
     def __init__(self, canvas: Canvas, input_dir: str, output_dir: str):
         """Initialize all data objects.
@@ -50,6 +51,7 @@ class Model:
 
         If image has already opened, nothing is changed.
         If image have unsaved changes, MessageBox is poped up.
+
         :param get_indexes: function, which produces indexes of selected items
         """
         self.have_unsaved_changes()
@@ -69,7 +71,7 @@ class Model:
     def have_unsaved_changes(self):
         """Check if current items on canvas are the same as saved before.
 
-        Otherwise pop up a MessageBox box with suggestion to save image.
+        Otherwise pop up a MessageBox with suggestion to save image.
         """
         items = self.canvas.scene.items()
         if self.saved_items != items:

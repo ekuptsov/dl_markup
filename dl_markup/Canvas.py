@@ -61,6 +61,7 @@ class Canvas(QtWidgets.QGraphicsView):
         """Change tool size by pressing '+' and '-' buttons.
 
         Implemented only for brush tool.
+
         :param e: event object
         """
         super().keyPressEvent(e)
@@ -71,6 +72,7 @@ class Canvas(QtWidgets.QGraphicsView):
 
         Press sender button and rise another.
         Only support Brush and Polygon.
+
         :param buttons: list of Brush and Polygon buttons
         """
         sender = self.sender()
@@ -96,6 +98,7 @@ class Canvas(QtWidgets.QGraphicsView):
 
         Call QColor.colorNames() staticmethod to figure out
         valid strings that QColor knows about.
+
         :param color: new color of tool
         """
         self.tool.color = QtGui.QColor(color)

@@ -24,7 +24,7 @@ class VertexItem(QtWidgets.QGraphicsRectItem):
             parent: QtWidgets.QGraphicsRectItem = None):
         """Represent vertex of Polygon tool.
 
-        :param incoming_egde:
+        :param incoming_egde: last edge of drawable polygon (None, if vertex is first)
         :param side: side lenght of drawing rectangle representing the vertex
         :param pen: pen that used in RectItem and LineItem
         :param brush: brush that used in RectItem
