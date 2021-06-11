@@ -9,6 +9,8 @@ from .View import View
 from .Model import Model
 from .Canvas import Canvas
 
+from pathlib import Path
+
 
 class DLMarkupApplication:
     """Application class to connect all parts together."""
@@ -32,7 +34,10 @@ class DLMarkupApplication:
         locale_str = locale.getlocale(locale.LC_MESSAGES)[0]
         self.translator = QTranslator()
         print("Locale:", locale_str)
-        self.translator.load(f"dl_markup.{locale_str}")
+
+        self.translator.load(
+            f'dl_markup.{locale_str}',
+            str(Path(__file__).parent / f'{locale_str}'))
         if not self.app.installTranslator(self.translator):
             print("Can not install translation")
 
