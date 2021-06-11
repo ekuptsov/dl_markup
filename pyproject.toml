@@ -1,6 +1,53 @@
 [build-system]
 requires = [
-    "setuptools>=42",
-    "wheel"
+    alabaster==0.7.12
+    attrs==20.3.0
+    autopep8==1.5.7
+    Babel==2.9.0
+    certifi==2020.12.5
+    chardet==4.0.0
+    docutils==0.16
+    EasyProcess==0.3
+    flake8==3.9.1
+    idna==2.10
+    imagesize==1.2.0
+    importlib-metadata==4.0.1
+    iniconfig==1.1.1
+    Jinja2==2.11.3
+    m2r==0.2.1
+    m2r2==0.2.7
+    MarkupSafe==1.1.1
+    mccabe==0.6.1
+    mistune==0.8.4
+    packaging==20.9
+    pluggy==0.13.1
+    py==1.10.0
+    pycodestyle==2.7.0
+    pydocstyle==6.0.0
+    pyflakes==2.3.1
+    Pygments==2.8.1
+    pyparsing==2.4.7
+    PyQt5==5.15.4
+    PyQt5-Qt5==5.15.2
+    PyQt5-sip==12.8.1
+    pytest==6.2.3
+    pytest-qt==3.3.0
+    pytz==2021.1
+    PyVirtualDisplay==2.1
+    requests==2.25.1
+    snowballstemmer==2.1.0
+    Sphinx==3.5.4
+    sphinx-rtd-theme==0.5.2
+    sphinxcontrib-applehelp==1.0.2
+    sphinxcontrib-devhelp==1.0.2
+    sphinxcontrib-htmlhelp==1.0.3
+    sphinxcontrib-jsmath==1.0.1
+    sphinxcontrib-qthelp==1.0.3
+    sphinxcontrib-serializinghtml==1.1.4
+    toml==0.10.2
+    typing-extensions==3.10.0.0
+    urllib3==1.26.4
+    zipp==3.4.1
+    pytest-cov==2.12.1
 ]
 build-backend = "setuptools.build_meta"

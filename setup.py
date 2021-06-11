@@ -1,5 +1,6 @@
 from distutils.core import setup
 import distutils.cmd
+import setuptools.command.build_py
 import subprocess
 
 
@@ -41,6 +42,14 @@ class CheckCommand(distutils.cmd.Command):
         subprocess.run(['sh', './scripts/check.sh'])
 
 
+class BuildPyCommand(setuptools.command.build_py.build_py):
+  """Custom build command."""
+
+  def run(self):
+    self.run_command('localization')
+    setuptools.command.build_py.build_py.run(self)
+
+
 setup(
     name='dl_markup',
     version='0.0.1',
@@ -53,7 +62,8 @@ setup(
     },
     cmdclass={
         'localization': LocalizationCommand,
-        'check': CheckCommand
+        'check': CheckCommand,
+        'build_py': BuildPyCommand,
     },
     package_data={
         "dl_markup": ["*/*.qm"],
