@@ -3,7 +3,7 @@
 <context>
     <name>Palette</name>
     <message>
-        <location filename="dl_markup/Palette.py" line="31"/>
+        <location filename="dl_markup/Palette.py" line="42"/>
         <source>Color palette</source>
         <translation>Цветовая палитра</translation>
     </message>
@@ -26,52 +26,52 @@
         <translation type="obsolete">Открыть</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="128"/>
+        <location filename="dl_markup/View.py" line="131"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="132"/>
+        <location filename="dl_markup/View.py" line="135"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="136"/>
+        <location filename="dl_markup/View.py" line="139"/>
         <source>Redo</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="140"/>
+        <location filename="dl_markup/View.py" line="143"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="103"/>
+        <location filename="dl_markup/View.py" line="106"/>
         <source>Input directory</source>
         <translation>Открыть из</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="118"/>
+        <location filename="dl_markup/View.py" line="121"/>
         <source>Change</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="114"/>
+        <location filename="dl_markup/View.py" line="117"/>
         <source>Output directory</source>
         <translation>Сохранить в</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="67"/>
+        <location filename="dl_markup/View.py" line="70"/>
         <source>Markup tool</source>
         <translation>Инструмент разметки</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="73"/>
+        <location filename="dl_markup/View.py" line="76"/>
         <source>Brush</source>
         <translation>Кисть</translation>
     </message>
     <message>
-        <location filename="dl_markup/View.py" line="75"/>
+        <location filename="dl_markup/View.py" line="78"/>
         <source>Polygon</source>
         <translation>Многоугольник</translation>
     </message>

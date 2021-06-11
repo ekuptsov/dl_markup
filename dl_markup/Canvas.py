@@ -75,7 +75,15 @@ class Canvas(QtWidgets.QGraphicsView):
 
         :param buttons: list of Brush and Polygon buttons
         """
+        assert len(buttons) == 2, "Support exactly 2 tools"
         sender = self.sender()
+        # select pressed and unpressed buttons
+        prev_button = buttons[sender is buttons[0]]
+        current_button = buttons[sender is buttons[1]]
+        # if it's not checked, ignore click
+        if not prev_button.isChecked():
+            current_button.setChecked(True)
+            return
         tool_color = self.tool.color
         brush_text = QCoreApplication.translate('View', 'Brush')
         polygon_text = QCoreApplication.translate('View', 'Polygon')
@@ -87,10 +95,7 @@ class Canvas(QtWidgets.QGraphicsView):
             self.tool = Brush(self, tool_color)
         elif sender.text() == polygon_text:
             self.tool = Polygon(self, tool_color)
-        assert len(buttons) == 2, "Support exactly 2 tools"
-        # small hint to choose another button
-        prev_button = buttons[sender == buttons[0]]
-        # and rise it
+        # rise prev button
         prev_button.setChecked(False)
 
     def changeToolColor(self, color: str):
@@ -126,6 +131,7 @@ class Canvas(QtWidgets.QGraphicsView):
         self.setTransformationAnchor(old_anchor)
 
     def wheelEvent(self, e):
+        """Call on mouse scroll."""
         if e.modifiers() & QtCore.Qt.ControlModifier:
             self._zoom(e.angleDelta())
         else:
@@ -133,6 +139,7 @@ class Canvas(QtWidgets.QGraphicsView):
 
     def clear(self):
         """Clear scene and history."""
+        self.tool.clear()
         self.scene.clear()
         self.undo_redo.clear()
 

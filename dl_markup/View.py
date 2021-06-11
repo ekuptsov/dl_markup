@@ -42,18 +42,21 @@ class View(QMainWindow):
         layout = QHBoxLayout()
         mainLayout.addLayout(layout)
 
+        vertLayout = QVBoxLayout()
+
         # display list of images in input dir
         fileList = QListView()
         fileList.setModel(model.listModel)
         fileList.clicked.connect(
             partial(model.open, fileList.selectedIndexes))
-        layout.addWidget(fileList)
-
-        # painting area
-        layout.addWidget(canvas)
+        vertLayout.addWidget(fileList, 2)
 
         toolLayout = self._createToolLayout(canvas)
-        layout.addLayout(toolLayout)
+        vertLayout.addLayout(toolLayout, 1)
+
+        # painting area
+        layout.addWidget(canvas, 4)
+        layout.addLayout(vertLayout, 1)
 
     def _createToolLayout(self, canvas: Canvas):
         """Store markup tools and color palette.

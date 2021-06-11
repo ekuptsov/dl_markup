@@ -109,6 +109,7 @@ class Brush:
 
     Draw CylinderItems when user hold and move the mouse on canvas.
     """
+
     def __init__(self, canvas: 'Canvas', color: QtGui.QColor):
         """Initialize brush.
 
@@ -123,6 +124,7 @@ class Brush:
 
     @property
     def radius(self):
+        """Brush radius."""
         return self._radius
 
     @radius.setter
@@ -206,6 +208,7 @@ class Brush:
         self.last_y = scene_point.y()
 
     def mousePressEvent(self, e):
+        """Call on mouse press."""
         scene_point = self.canvas.mapToScene(e.pos())
         self.last_x = scene_point.x()
         self.last_y = scene_point.y()
@@ -232,3 +235,7 @@ class Brush:
         else:
             return
         print("New brush size:", self.radius)
+
+    def clear(self):
+        """Accurately free resources."""
+        pass
