@@ -43,11 +43,11 @@ class CheckCommand(distutils.cmd.Command):
 
 
 class BuildPyCommand(setuptools.command.build_py.build_py):
-  """Custom build command."""
+    """Custom build command."""
 
-  def run(self):
-    self.run_command('localization')
-    setuptools.command.build_py.build_py.run(self)
+    def run(self):
+        self.run_command('localization')
+        setuptools.command.build_py.build_py.run(self)
 
 
 setup(
