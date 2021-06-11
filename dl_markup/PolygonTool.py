@@ -33,6 +33,7 @@ class VertexItem(QtWidgets.QGraphicsRectItem):
         """
         rect = QtCore.QRectF(0, 0, side, side)
         self.side = side
+        self.halfSide = side / 2
         super().__init__(rect, parent)
         self.incoming_edge = incoming_edge
 
@@ -54,12 +55,19 @@ class VertexItem(QtWidgets.QGraphicsRectItem):
             return
         rect = QtCore.QRectF(0, 0, 2 * self.side, 2 * self.side)
         self.setRect(rect)
- 
+        self.moveBy(-self.halfSide, -self.halfSide)
+        self.outgoing_edge.moveBy(self.halfSide, self.halfSide)
+
     def hoverLeaveEvent(self, e):
-        self.leaved = True
+        if not self.leaved:
+            self.leaved = True
+            return
+        self.moveBy(self.halfSide, self.halfSide)
+        self.outgoing_edge.moveBy(-self.halfSide, -self.halfSide)
         rect = QtCore.QRectF(0, 0, self.side, self.side)
         self.setRect(rect)
- 
+        self.leaved = True
+
     def mouseMoveEvent(self, e):
         """When vertex is moved, incident edges are changed too."""
         old_vertex_center = self.scenePos() + self.rect().center()

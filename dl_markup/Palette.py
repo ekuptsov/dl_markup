@@ -59,7 +59,12 @@ class Palette(QWidget):
             button = QPushButton()
             button.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
             button.setMinimumSize(*bsize)
-            button.setStyleSheet(f'background-color: {color};')
+            style = """
+                QPushButton {
+                    background: """ + f'{color}' + """ ;}
+                QPushButton::checked {
+                    border: 3px solid black;}"""
+            button.setStyleSheet(style)
             buttons.append(button)
         return buttons
 
@@ -74,10 +79,13 @@ class Palette(QWidget):
             if color == '#00FF00':
                 bt.setChecked(True)
                 self.pressedButton = bt
+                self.pressedButton.setEnabled(False)
 
     def changePressedButton(self):
         """Each time only one button is pressed."""
         sender = self.sender()
-        if self.pressedButton is not None:
+        if self.pressedButton is not None and sender is not self.pressedButton:
+            self.pressedButton.setEnabled(True)
             self.pressedButton.setChecked(False)
         self.pressedButton = sender
+        self.pressedButton.setEnabled(False)
