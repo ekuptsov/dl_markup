@@ -51,10 +51,10 @@ class CylinderItem(QtWidgets.QGraphicsItem):
             dir_vec.x()
         )
         vecs = [
-            QtGui.QVector2D(self.__begin) + self.__radius*norm_vec,
-            QtGui.QVector2D(self.__end) + self.__radius*norm_vec,
-            QtGui.QVector2D(self.__end) - self.__radius*norm_vec,
-            QtGui.QVector2D(self.__begin) - self.__radius*norm_vec,
+            QtGui.QVector2D(self.__begin) + self.__radius * norm_vec,
+            QtGui.QVector2D(self.__end) + self.__radius * norm_vec,
+            QtGui.QVector2D(self.__end) - self.__radius * norm_vec,
+            QtGui.QVector2D(self.__begin) - self.__radius * norm_vec,
         ]
         self.__polygon = QtWidgets.QGraphicsPolygonItem(
             QtGui.QPolygonF([QtCore.QPointF(vec.x(), vec.y()) for vec in vecs])
