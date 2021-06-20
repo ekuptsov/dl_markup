@@ -20,3 +20,6 @@ def main():
     print(args)
     app = DLMarkupApplication(args.__dict__)
     sys.exit(app.run())
+
+if __name__ == '__main__':
+    main()
